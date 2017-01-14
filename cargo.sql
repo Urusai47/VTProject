@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 14, 2017 at 08:45 PM
+-- Generation Time: Jan 14, 2017 at 09:27 PM
 -- Server version: 10.1.19-MariaDB
 -- PHP Version: 5.6.28
 
@@ -30,32 +30,55 @@ SELECT `UserName` FROM `user` WHERE `UserName` = uname;
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_addresses` ()  NO SQL
-SELECT * FROM address$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_addresses` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM address;
+COMMIT;
+END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_cargos` ()  NO SQL
-SELECT * FROM cargo$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_cargos` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM cargo;
+COMMIT;
+END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_couriers` ()  NO SQL
-SELECT * FROM courier$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_couriers` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM courier NATURAL JOIN Employee NATURAL JOIN Person;
+COMMIT;
+END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_customers` ()  NO SQL
-SELECT * FROM customer$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_customers` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM customer NATURAL JOIN person;
+COMMIT;
+END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_deliverytypes` ()  NO SQL
-SELECT * FROM deliverytype$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_deliverytypes` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM deliverytype;
+COMMIT;
+END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_discounts` ()  NO SQL
-SELECT * FROM discount$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_discounts` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM discount;
+COMMIT;
+END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_drivers` ()  NO SQL
-SELECT * FROM driver$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_drivers` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM driver NATURAL JOIN Employee NATURAL JOIN Person;
+COMMIT;
+END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_employees` ()  NO SQL
-SELECT * FROM employee$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_feedbacks` ()  NO SQL
-SELECT * FROM feedback$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_feedbacks` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM feedback 
+INNER JOIN customer ON feedback.`FK_Customer_TCKN` = customer.`TCKN` 
+INNER JOIN Person ON customer.`TCKN` = person.`TCKN`;
+COMMIT;
+END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_insurancecompanies` ()  NO SQL
 SELECT * FROM insurancecompany$$
@@ -69,20 +92,23 @@ SELECT * FROM insurancetype$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_insurancetype_insurancecompany` ()  NO SQL
 SELECT * FROM insurancetypeinsurancecompany$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_insurance_cargo` ()  NO SQL
-SELECT * FROM insurancecargo$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_insurance_cargo` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM insurancecargo;
+COMMIT;
+END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_officers` ()  NO SQL
-SELECT * FROM officer$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_officers` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM officer NATURAL JOIN Employee NATURAL JOIN Person;
+COMMIT;
+END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_offices` ()  NO SQL
 SELECT * FROM office$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_packages` ()  NO SQL
 SELECT * FROM package$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_people` ()  NO SQL
-SELECT * FROM person$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_person_address` ()  NO SQL
 SELECT * FROM personaddress$$
@@ -102,8 +128,11 @@ SELECT * FROM vehicletype$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_warehouses` ()  NO SQL
 SELECT * FROM warehouse$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_address` (IN `type` VARCHAR(255), IN `fulladdress` VARCHAR(255))  NO SQL
-INSERT INTO address (Type, FullAddress) VALUES(type, fulladdress)$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_address` (IN `t` VARCHAR(255), IN `fa` VARCHAR(255))  BEGIN
+START TRANSACTION;
+INSERT INTO address (`Type`, `FullAddress`) VALUES(t, fa);
+COMMIT;
+END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_cargo` (IN `price` BIGINT(255), IN `deliverytypeid` INT(11), IN `recievertc` BIGINT(255), IN `sendertc` BIGINT(255), IN `couriertc` BIGINT(255), IN `officeid` INT(11), IN `discountid` INT(11))  BEGIN
 START TRANSACTION;
@@ -322,13 +351,6 @@ CREATE TABLE `driver` (
   `FK_Driving_Plate` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `driver`
---
-
-INSERT INTO `driver` (`TCKN`, `FK_Driving_Plate`) VALUES
-(35216497, '4534512');
-
 -- --------------------------------------------------------
 
 --
@@ -340,13 +362,6 @@ CREATE TABLE `employee` (
   `SSN` int(11) NOT NULL,
   `FK_Office_OfficeID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `employee`
---
-
-INSERT INTO `employee` (`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES
-(35216497, 46658432, 1);
 
 -- --------------------------------------------------------
 
@@ -468,19 +483,6 @@ CREATE TABLE `person` (
   `LastName` varchar(255) NOT NULL,
   `PhoneNumber` int(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `person`
---
-
-INSERT INTO `person` (`TCKN`, `FirstName`, `LastName`, `PhoneNumber`) VALUES
-(46885, 'Dcan', 'Yigit', 56658),
-(456879, 'Salih Emre', 'Boa', 14569845),
-(844984, 'Berkay ', 'Ozc', 1544156),
-(15636531, 'Emre', 'Aytac', 48519864),
-(35216497, 'sdfsdf', 'asdasd', 123456),
-(45684989, 'Bugra', 'Guler', 123456988),
-(35539665642, 'Sanberk', 'Saticioglu', 1111);
 
 -- --------------------------------------------------------
 
@@ -792,7 +794,7 @@ ALTER TABLE `discount`
 -- AUTO_INCREMENT for table `driver`
 --
 ALTER TABLE `driver`
-  MODIFY `TCKN` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35216498;
+  MODIFY `TCKN` bigint(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `employee`
 --
