@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 14, 2017 at 07:59 PM
+-- Generation Time: Jan 14, 2017 at 08:28 PM
 -- Server version: 10.1.19-MariaDB
 -- PHP Version: 5.6.28
 
@@ -180,6 +180,12 @@ END$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_package` (IN `barcode` VARCHAR(255), IN `cargoid` INT(11))  BEGIN
 START TRANSACTION;
 INSERT INTO package (`Barcode`, `FK_Cargo_CargoID`) VALUES(barcode, cargoid);
+COMMIT;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_photo` (IN `p` VARCHAR(255))  BEGIN
+START TRANSACTION;
+INSERT INTO photo (`Path`) VALUES(p);
 COMMIT;
 END$$
 
@@ -490,6 +496,17 @@ CREATE TABLE `personaddress` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `photo`
+--
+
+CREATE TABLE `photo` (
+  `PhotoID` int(11) NOT NULL,
+  `Path` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `suboffice`
 --
 
@@ -711,6 +728,12 @@ ALTER TABLE `personaddress`
   ADD KEY `FK_Address_ID_2` (`FK_Address_ID`);
 
 --
+-- Indexes for table `photo`
+--
+ALTER TABLE `photo`
+  ADD PRIMARY KEY (`PhotoID`);
+
+--
 -- Indexes for table `suboffice`
 --
 ALTER TABLE `suboffice`
@@ -785,6 +808,11 @@ ALTER TABLE `office`
 --
 ALTER TABLE `person`
   MODIFY `TCKN` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2147483647;
+--
+-- AUTO_INCREMENT for table `photo`
+--
+ALTER TABLE `photo`
+  MODIFY `PhotoID` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `vehicletype`
 --
