@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 14, 2017 at 09:42 PM
+-- Generation Time: Jan 15, 2017 at 12:23 AM
 -- Server version: 10.1.19-MariaDB
 -- PHP Version: 5.6.28
 
@@ -149,100 +149,116 @@ SELECT * FROM warehouse NATURAL JOIN office;
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_address` (IN `t` VARCHAR(255), IN `fa` VARCHAR(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_address` (IN `t` VARCHAR(255), IN `fa` VARCHAR(255), IN `u` VARCHAR(255))  BEGIN
 START TRANSACTION;
 INSERT INTO address (`Type`, `FullAddress`) VALUES(t, fa);
+CALL insert_log(CONCAT(u, ' added an address', ' with id ', LAST_INSERT_ID()));
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_cargo` (IN `p` BIGINT(255), IN `dti` INT(11), IN `rtc` BIGINT(255), IN `stc` BIGINT(255), IN `ctc` BIGINT(255), IN `oid` INT(11), IN `did` INT(11))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_cargo` (IN `p` BIGINT(255), IN `dti` INT(11), IN `rtc` BIGINT(255), IN `stc` BIGINT(255), IN `ctc` BIGINT(255), IN `oid` INT(11), IN `did` INT(11), IN `u` VARCHAR(255))  BEGIN
 START TRANSACTION;
 INSERT INTO cargo (`Price`, `FK_DeliveryType_ID`, `FK_Reciever_TCKN`, `FK_Sender_TCKN`, `FK_Courier_TCKN`, `FK_Office_ID`, `FK_Discount_DiscountID`) VALUES(p, dti, rtc, stc, ctc, oid, dti);
+CALL insert_log(CONCAT(u, ' added a cargo', ' with id ', LAST_INSERT_ID()));
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_courier` (IN `tc` BIGINT(255), IN `fn` VARCHAR(255), IN `ln` VARCHAR(255), IN `pn` BIGINT(255), IN `ssn2` BIGINT(255), IN `office` INT(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_courier` (IN `tc` BIGINT(255), IN `fn` VARCHAR(255), IN `ln` VARCHAR(255), IN `pn` BIGINT(255), IN `ssn2` BIGINT(255), IN `office` INT(255), IN `u` VARCHAR(255))  BEGIN
 START TRANSACTION;
 INSERT IGNORE INTO person (`TCKN`, `FirstName`, `LastName`, `PhoneNumber`) VALUES(tc, fn, ln, pn);
 INSERT IGNORE INTO employee(`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES(tc, ssn2, office);
 INSERT INTO courier(`TCKN`) VALUES(tc);
+CALL insert_log(CONCAT(u, ' added a courier',' with id ', LAST_INSERT_ID()));
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_deliverytype` (IN `n` VARCHAR(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_deliverytype` (IN `n` VARCHAR(255), IN `u` VARCHAR(255))  BEGIN
 START TRANSACTION;
 INSERT INTO deliverytype (`Name`) VALUES(n);
+CALL insert_log(CONCAT(u, ' added a delivery type',' with id ', LAST_INSERT_ID()));
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_discount` (IN `p` TINYINT(4), IN `n` VARCHAR(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_discount` (IN `p` TINYINT(4), IN `n` VARCHAR(255), IN `u` VARCHAR(255))  BEGIN
 START TRANSACTION;
 INSERT INTO discount (`Percentage`, `Name`) VALUES(p, n);
+CALL insert_log(CONCAT(u, ' added a discount',' with id ', LAST_INSERT_ID()));
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_driver` (IN `tc` BIGINT(255), IN `fn` VARCHAR(255), IN `ln` VARCHAR(255), IN `pn` BIGINT(255), IN `ssn2` BIGINT(255), IN `office` INT(255), IN `carplate` INT(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_driver` (IN `tc` BIGINT(255), IN `fn` VARCHAR(255), IN `ln` VARCHAR(255), IN `pn` BIGINT(255), IN `ssn2` BIGINT(255), IN `office` INT(255), IN `carplate` INT(255), IN `u` VARCHAR(255))  BEGIN
 START TRANSACTION;
 INSERT IGNORE INTO person (`TCKN`, `FirstName`, `LastName`, `PhoneNumber`) VALUES(tc, fn, ln, pn);
 INSERT IGNORE INTO employee(`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES(tc, ssn2, office);
 INSERT INTO driver(`TCKN`, `FK_Driving_Plate`) VALUES(tc, carplate);
+CALL insert_log(CONCAT(u, ' added a driver',' with id ', LAST_INSERT_ID()));
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_feedback` (IN `customertc` BIGINT(255), IN `s` TINYINT(4), IN `m` VARCHAR(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_feedback` (IN `customertc` BIGINT(255), IN `s` TINYINT(4), IN `m` VARCHAR(255), IN `u` VARCHAR(255))  BEGIN
 START TRANSACTION;
 INSERT INTO feedback (`Score`, `Message`, `FK_Customer_TCKN`) VALUES(s, m, customertc);
+CALL insert_log(CONCAT(u, ' added a feedback',' with id ', LAST_INSERT_ID()));
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_insurance` (IN `companyid` BIGINT(255), IN `typeid` BIGINT(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_insurance` (IN `companyid` BIGINT(255), IN `typeid` BIGINT(255), IN `u` VARCHAR(255))  BEGIN
 START TRANSACTION;
 INSERT INTO insurance (`FK_InsuranceCompany_ID`, `FK_InsuranceType_ID`) VALUES(companyid, typeid);
+CALL insert_log(CONCAT(u, ' added an insurance',' with id ', LAST_INSERT_ID()));
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_insurancecompany` (IN `n` VARCHAR(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_insurancecompany` (IN `n` VARCHAR(255), IN `u` VARCHAR(255))  BEGIN
 START TRANSACTION;
 INSERT INTO insurancecompany (`Name`) VALUES(n);
+CALL insert_log(CONCAT(u, ' added an Insurance Company',' with id ', LAST_INSERT_ID()));
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_insurancetype` (IN `n` VARCHAR(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_insurancetype` (IN `n` VARCHAR(255), IN `u` VARCHAR(255))  BEGIN
 START TRANSACTION;
 INSERT INTO insurancetype (`Name`) VALUES(n);
+CALL insert_log(CONCAT(u, ' added an Insurance Type',' with id ', LAST_INSERT_ID()));
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_office` (IN `aid` VARCHAR(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_log` (IN `a` VARCHAR(255))  BEGIN
 START TRANSACTION;
-INSERT INTO office (`FK_Address_ID`) VALUES(aid);
+IF(SELECT COUNT(*) FROM log) >= 10 THEN
+    DELETE FROM log ORDER BY `Time` ASC LIMIT 1;END IF;
+INSERT INTO log (`Action`) VALUES(a);
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_officer` (IN `tc` BIGINT(255), IN `fn` VARCHAR(255), IN `ln` VARCHAR(255), IN `pn` BIGINT(255), IN `ssn2` BIGINT(255), IN `office` INT(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_officer` (IN `tc` BIGINT(255), IN `fn` VARCHAR(255), IN `ln` VARCHAR(255), IN `pn` BIGINT(255), IN `ssn2` BIGINT(255), IN `office` INT(255), IN `u` VARCHAR(255))  BEGIN
 START TRANSACTION;
 INSERT IGNORE INTO person (`TCKN`, `FirstName`, `LastName`, `PhoneNumber`) VALUES(tc, fn, ln, pn);
 INSERT IGNORE INTO employee(`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES(tc, ssn2, office);
 INSERT INTO officer(`TCKN`) VALUES(tc);
+CALL insert_log(CONCAT(u, ' added an officer',' with id ', LAST_INSERT_ID()));
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_package` (IN `b` VARCHAR(255), IN `cargoid` INT(11))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_package` (IN `b` VARCHAR(255), IN `cargoid` INT(11), IN `u` VARCHAR(255))  BEGIN
 START TRANSACTION;
 INSERT INTO package (`Barcode`, `FK_Cargo_CargoID`) VALUES(b, cargoid);
+CALL insert_log(CONCAT(u, ' added a package',' with id ', LAST_INSERT_ID()));
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_photo` (IN `p` VARCHAR(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_photo` (IN `p` VARCHAR(255), IN `u` VARCHAR(255))  BEGIN
 START TRANSACTION;
 INSERT INTO photo (`Path`) VALUES(p);
+CALL insert_log(CONCAT(u, ' added a photo',' with id ', LAST_INSERT_ID()));
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_suboffice` (IN `addressid` INT(11))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_suboffice` (IN `addressid` INT(11), IN `u` VARCHAR(255))  BEGIN
 START TRANSACTION;
 INSERT INTO office(`FK_Address_ID`) VALUES(addressid);
 INSERT INTO suboffice (`OfficeID`) VALUES(LAST_INSERT_ID());
+CALL insert_log(CONCAT(u, ' added a suboffice',' with id ', LAST_INSERT_ID()));
 COMMIT;
 END$$
 
@@ -252,22 +268,25 @@ INSERT INTO `user` (`UserName`,`Password`) VALUES(uname,MD5(password));
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_vehicle` (IN `p` VARCHAR(255), IN `typeid` INT(11))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_vehicle` (IN `p` VARCHAR(255), IN `typeid` INT(11), IN `u` VARCHAR(255))  BEGIN
 START TRANSACTION;
 INSERT INTO vehicle(`Plate`, `FK_VehicleType_ID`) VALUES(p, typeid);
+CALL insert_log(CONCAT(u, ' added a vehicle',' with id ', LAST_INSERT_ID()));
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_vehicletype` (IN `type` VARCHAR(255), IN `brand` VARCHAR(255), IN `model` VARCHAR(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_vehicletype` (IN `type` VARCHAR(255), IN `brand` VARCHAR(255), IN `model` VARCHAR(255), IN `u` VARCHAR(255))  BEGIN
 START TRANSACTION;
 INSERT INTO vehicletype(`TypeName`, `Brand`, `Model`) VALUES(type, brand, model);
+CALL insert_log(CONCAT(u, ' added a Vehicle Type',' with id ', LAST_INSERT_ID()));
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_warehouse` (IN `addressid` INT(11))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_warehouse` (IN `addressid` INT(11), IN `u` VARCHAR(255))  BEGIN
 START TRANSACTION;
 INSERT INTO office(`FK_Address_ID`) VALUES(addressid);
 INSERT INTO warehouse (`OfficeID`) VALUES(LAST_INSERT_ID());
+CALL insert_log(CONCAT(u, ' added a Warehouse',' with id ', LAST_INSERT_ID()));
 COMMIT;
 END$$
 
@@ -298,7 +317,14 @@ CREATE TABLE `address` (
 INSERT INTO `address` (`AddressID`, `Type`, `FullAddress`) VALUES
 (1, 'Ev ', 'Mursel Uluc Mah'),
 (2, 'Okul', 'Beytepe'),
-(3, 'Ofis', 'Dikmen Cad.');
+(3, 'Ofis', 'Dikmen Cad.'),
+(4, 'idk', 'idk'),
+(5, 'se', 'se'),
+(6, 'se', 'se'),
+(7, 'se', 'se'),
+(8, 'a', 'a'),
+(9, 'a', 'a'),
+(10, 'z', 'z');
 
 -- --------------------------------------------------------
 
@@ -452,6 +478,27 @@ CREATE TABLE `insurancetypeinsurancecompany` (
   `InsuranceType_ID` int(11) NOT NULL,
   `InsuranceCompany_ID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `log`
+--
+
+CREATE TABLE `log` (
+  `LogID` int(11) NOT NULL,
+  `Action` varchar(255) NOT NULL,
+  `Time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `log`
+--
+
+INSERT INTO `log` (`LogID`, `Action`, `Time`) VALUES
+(1, 'b added an address123', '2017-01-15 02:13:01'),
+(2, 'b added an address123', '2017-01-15 02:17:15'),
+(3, 'z added an addresswith id 10', '2017-01-15 02:19:21');
 
 -- --------------------------------------------------------
 
@@ -717,6 +764,12 @@ ALTER TABLE `insurancetypeinsurancecompany`
   ADD KEY `InsuranceCompany_ID` (`InsuranceCompany_ID`);
 
 --
+-- Indexes for table `log`
+--
+ALTER TABLE `log`
+  ADD PRIMARY KEY (`LogID`);
+
+--
 -- Indexes for table `office`
 --
 ALTER TABLE `office`
@@ -795,7 +848,7 @@ ALTER TABLE `warehouse`
 -- AUTO_INCREMENT for table `address`
 --
 ALTER TABLE `address`
-  MODIFY `AddressID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `AddressID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `cargo`
 --
@@ -821,6 +874,11 @@ ALTER TABLE `driver`
 --
 ALTER TABLE `employee`
   MODIFY `TCKN` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35216498;
+--
+-- AUTO_INCREMENT for table `log`
+--
+ALTER TABLE `log`
+  MODIFY `LogID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `office`
 --
