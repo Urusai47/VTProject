@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 14, 2017 at 08:45 PM
+-- Generation Time: Jan 14, 2017 at 09:42 PM
 -- Server version: 10.1.19-MariaDB
 -- PHP Version: 5.6.28
 
@@ -30,38 +30,67 @@ SELECT `UserName` FROM `user` WHERE `UserName` = uname;
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_addresses` ()  NO SQL
-SELECT * FROM address$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_addresses` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM address;
+COMMIT;
+END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_cargos` ()  NO SQL
-SELECT * FROM cargo$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_cargos` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM cargo;
+COMMIT;
+END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_couriers` ()  NO SQL
-SELECT * FROM courier$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_couriers` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM courier NATURAL JOIN Employee NATURAL JOIN Person;
+COMMIT;
+END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_customers` ()  NO SQL
-SELECT * FROM customer$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_customers` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM customer NATURAL JOIN person;
+COMMIT;
+END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_deliverytypes` ()  NO SQL
-SELECT * FROM deliverytype$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_deliverytypes` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM deliverytype;
+COMMIT;
+END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_discounts` ()  NO SQL
-SELECT * FROM discount$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_discounts` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM discount;
+COMMIT;
+END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_drivers` ()  NO SQL
-SELECT * FROM driver$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_drivers` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM driver NATURAL JOIN Employee NATURAL JOIN Person;
+COMMIT;
+END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_employees` ()  NO SQL
-SELECT * FROM employee$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_feedbacks` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM feedback 
+INNER JOIN customer ON feedback.`FK_Customer_TCKN` = customer.`TCKN` 
+INNER JOIN Person ON customer.`TCKN` = person.`TCKN`;
+COMMIT;
+END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_feedbacks` ()  NO SQL
-SELECT * FROM feedback$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_insurancecompanies` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM insurancecompany;
+COMMIT;
+END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_insurancecompanies` ()  NO SQL
-SELECT * FROM insurancecompany$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_insurances` ()  NO SQL
-SELECT * FROM insurance$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_insurances` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM insurance;
+COMMIT;
+END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_insurancetypes` ()  NO SQL
 SELECT * FROM insurancetype$$
@@ -69,79 +98,100 @@ SELECT * FROM insurancetype$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_insurancetype_insurancecompany` ()  NO SQL
 SELECT * FROM insurancetypeinsurancecompany$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_insurance_cargo` ()  NO SQL
-SELECT * FROM insurancecargo$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_insurance_cargo` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM insurancecargo;
+COMMIT;
+END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_officers` ()  NO SQL
-SELECT * FROM officer$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_officers` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM officer NATURAL JOIN Employee NATURAL JOIN Person;
+COMMIT;
+END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_offices` ()  NO SQL
-SELECT * FROM office$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_packages` ()  NO SQL
-SELECT * FROM package$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_people` ()  NO SQL
-SELECT * FROM person$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_packages` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM package;
+COMMIT;
+END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_person_address` ()  NO SQL
 SELECT * FROM personaddress$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_suboffices` ()  NO SQL
-SELECT * FROM suboffice$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_users` ()  NO SQL
-SELECT * FROM user$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_vehicles` ()  NO SQL
-SELECT * FROM vehicle$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_vehicletypes` ()  NO SQL
-SELECT * FROM vehicletype$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_warehouses` ()  NO SQL
-SELECT * FROM warehouse$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_address` (IN `type` VARCHAR(255), IN `fulladdress` VARCHAR(255))  NO SQL
-INSERT INTO address (Type, FullAddress) VALUES(type, fulladdress)$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_cargo` (IN `price` BIGINT(255), IN `deliverytypeid` INT(11), IN `recievertc` BIGINT(255), IN `sendertc` BIGINT(255), IN `couriertc` BIGINT(255), IN `officeid` INT(11), IN `discountid` INT(11))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_suboffices` ()  BEGIN
 START TRANSACTION;
-INSERT INTO cargo (`Price`, `FK_DeliveryType_ID`, `FK_Reciever_TCKN`, `FK_Sender_TCKN`, `FK_Courier_TCKN`, `FK_Office_ID`, `FK_Discount_DiscountID`) VALUES(price, deliverytypeid, recievertc, sendertc, couriertc, officeid, discountid);
+SELECT * FROM suboffice NATURAL JOIN office;
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_courier` (IN `tc` BIGINT(255), IN `fn` VARCHAR(255), IN `ln` VARCHAR(255), IN `pn` BIGINT(255), IN `ssn` BIGINT(255), IN `office` INT(255), IN `carplate` INT(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_users` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM `user`;
+COMMIT;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_vehicles` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM vehicle;
+COMMIT;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_vehicletypes` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM vehicletype ;
+COMMIT;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_warehouses` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM warehouse NATURAL JOIN office;
+COMMIT;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_address` (IN `t` VARCHAR(255), IN `fa` VARCHAR(255))  BEGIN
+START TRANSACTION;
+INSERT INTO address (`Type`, `FullAddress`) VALUES(t, fa);
+COMMIT;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_cargo` (IN `p` BIGINT(255), IN `dti` INT(11), IN `rtc` BIGINT(255), IN `stc` BIGINT(255), IN `ctc` BIGINT(255), IN `oid` INT(11), IN `did` INT(11))  BEGIN
+START TRANSACTION;
+INSERT INTO cargo (`Price`, `FK_DeliveryType_ID`, `FK_Reciever_TCKN`, `FK_Sender_TCKN`, `FK_Courier_TCKN`, `FK_Office_ID`, `FK_Discount_DiscountID`) VALUES(p, dti, rtc, stc, ctc, oid, dti);
+COMMIT;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_courier` (IN `tc` BIGINT(255), IN `fn` VARCHAR(255), IN `ln` VARCHAR(255), IN `pn` BIGINT(255), IN `ssn2` BIGINT(255), IN `office` INT(255))  BEGIN
 START TRANSACTION;
 INSERT IGNORE INTO person (`TCKN`, `FirstName`, `LastName`, `PhoneNumber`) VALUES(tc, fn, ln, pn);
-INSERT IGNORE INTO employee(`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES(tc, ssn, office);
+INSERT IGNORE INTO employee(`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES(tc, ssn2, office);
 INSERT INTO courier(`TCKN`) VALUES(tc);
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_deliverytype` (IN `name` VARCHAR(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_deliverytype` (IN `n` VARCHAR(255))  BEGIN
 START TRANSACTION;
-INSERT INTO deliverytype (`Name`) VALUES(name);
+INSERT INTO deliverytype (`Name`) VALUES(n);
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_discount` (IN `percentange` TINYINT(4), IN `name` VARCHAR(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_discount` (IN `p` TINYINT(4), IN `n` VARCHAR(255))  BEGIN
 START TRANSACTION;
-INSERT INTO discount (`Percentage`, `Name`) VALUES(percentange, name);
+INSERT INTO discount (`Percentage`, `Name`) VALUES(p, n);
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_driver` (IN `tc` BIGINT(255), IN `fn` VARCHAR(255), IN `ln` VARCHAR(255), IN `pn` BIGINT(255), IN `ssn` BIGINT(255), IN `office` INT(255), IN `carplate` INT(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_driver` (IN `tc` BIGINT(255), IN `fn` VARCHAR(255), IN `ln` VARCHAR(255), IN `pn` BIGINT(255), IN `ssn2` BIGINT(255), IN `office` INT(255), IN `carplate` INT(255))  BEGIN
 START TRANSACTION;
 INSERT IGNORE INTO person (`TCKN`, `FirstName`, `LastName`, `PhoneNumber`) VALUES(tc, fn, ln, pn);
-INSERT IGNORE INTO employee(`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES(tc, ssn, office);
+INSERT IGNORE INTO employee(`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES(tc, ssn2, office);
 INSERT INTO driver(`TCKN`, `FK_Driving_Plate`) VALUES(tc, carplate);
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_feedback` (IN `customertc` BIGINT(255), IN `score` TINYINT(4), IN `message` VARCHAR(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_feedback` (IN `customertc` BIGINT(255), IN `s` TINYINT(4), IN `m` VARCHAR(255))  BEGIN
 START TRANSACTION;
-INSERT INTO feedback (`Score`, `Message`, `FK_Customer_TCKN`) VALUES(score, message, customertc);
+INSERT INTO feedback (`Score`, `Message`, `FK_Customer_TCKN`) VALUES(s, m, customertc);
 COMMIT;
 END$$
 
@@ -151,15 +201,15 @@ INSERT INTO insurance (`FK_InsuranceCompany_ID`, `FK_InsuranceType_ID`) VALUES(c
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_insurancecompany` (IN `name` VARCHAR(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_insurancecompany` (IN `n` VARCHAR(255))  BEGIN
 START TRANSACTION;
-INSERT INTO insurancecompany (`Name`) VALUES(name);
+INSERT INTO insurancecompany (`Name`) VALUES(n);
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_insurancetype` (IN `name` VARCHAR(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_insurancetype` (IN `n` VARCHAR(255))  BEGIN
 START TRANSACTION;
-INSERT INTO insurancetype (`Name`) VALUES(name);
+INSERT INTO insurancetype (`Name`) VALUES(n);
 COMMIT;
 END$$
 
@@ -169,17 +219,17 @@ INSERT INTO office (`FK_Address_ID`) VALUES(aid);
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_officer` (IN `tc` BIGINT(255), IN `fn` VARCHAR(255), IN `ln` VARCHAR(255), IN `pn` BIGINT(255), IN `ssn` BIGINT(255), IN `office` INT(255), IN `carplate` INT(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_officer` (IN `tc` BIGINT(255), IN `fn` VARCHAR(255), IN `ln` VARCHAR(255), IN `pn` BIGINT(255), IN `ssn2` BIGINT(255), IN `office` INT(255))  BEGIN
 START TRANSACTION;
 INSERT IGNORE INTO person (`TCKN`, `FirstName`, `LastName`, `PhoneNumber`) VALUES(tc, fn, ln, pn);
-INSERT IGNORE INTO employee(`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES(tc, ssn, office);
+INSERT IGNORE INTO employee(`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES(tc, ssn2, office);
 INSERT INTO officer(`TCKN`) VALUES(tc);
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_package` (IN `barcode` VARCHAR(255), IN `cargoid` INT(11))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_package` (IN `b` VARCHAR(255), IN `cargoid` INT(11))  BEGIN
 START TRANSACTION;
-INSERT INTO package (`Barcode`, `FK_Cargo_CargoID`) VALUES(barcode, cargoid);
+INSERT INTO package (`Barcode`, `FK_Cargo_CargoID`) VALUES(b, cargoid);
 COMMIT;
 END$$
 
@@ -202,9 +252,9 @@ INSERT INTO `user` (`UserName`,`Password`) VALUES(uname,MD5(password));
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_vehicle` (IN `plate` VARCHAR(255), IN `typeid` INT(11))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_vehicle` (IN `p` VARCHAR(255), IN `typeid` INT(11))  BEGIN
 START TRANSACTION;
-INSERT INTO vehicle(`Plate`, `FK_VehicleType_ID`) VALUES(plate, typeid);
+INSERT INTO vehicle(`Plate`, `FK_VehicleType_ID`) VALUES(p, typeid);
 COMMIT;
 END$$
 
@@ -322,13 +372,6 @@ CREATE TABLE `driver` (
   `FK_Driving_Plate` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `driver`
---
-
-INSERT INTO `driver` (`TCKN`, `FK_Driving_Plate`) VALUES
-(35216497, '4534512');
-
 -- --------------------------------------------------------
 
 --
@@ -340,13 +383,6 @@ CREATE TABLE `employee` (
   `SSN` int(11) NOT NULL,
   `FK_Office_OfficeID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `employee`
---
-
-INSERT INTO `employee` (`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES
-(35216497, 46658432, 1);
 
 -- --------------------------------------------------------
 
@@ -468,19 +504,6 @@ CREATE TABLE `person` (
   `LastName` varchar(255) NOT NULL,
   `PhoneNumber` int(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `person`
---
-
-INSERT INTO `person` (`TCKN`, `FirstName`, `LastName`, `PhoneNumber`) VALUES
-(46885, 'Dcan', 'Yigit', 56658),
-(456879, 'Salih Emre', 'Boa', 14569845),
-(844984, 'Berkay ', 'Ozc', 1544156),
-(15636531, 'Emre', 'Aytac', 48519864),
-(35216497, 'sdfsdf', 'asdasd', 123456),
-(45684989, 'Bugra', 'Guler', 123456988),
-(35539665642, 'Sanberk', 'Saticioglu', 1111);
 
 -- --------------------------------------------------------
 
@@ -792,7 +815,7 @@ ALTER TABLE `discount`
 -- AUTO_INCREMENT for table `driver`
 --
 ALTER TABLE `driver`
-  MODIFY `TCKN` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35216498;
+  MODIFY `TCKN` bigint(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `employee`
 --
