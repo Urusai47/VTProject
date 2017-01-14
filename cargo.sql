@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 14, 2017 at 08:28 PM
+-- Generation Time: Jan 14, 2017 at 08:45 PM
 -- Server version: 10.1.19-MariaDB
 -- PHP Version: 5.6.28
 
@@ -529,17 +529,17 @@ INSERT INTO `suboffice` (`OfficeID`) VALUES
 
 CREATE TABLE `user` (
   `UserName` varchar(255) NOT NULL,
-  `Password` varchar(255) NOT NULL
+  `Password` varchar(255) NOT NULL,
+  `Type` varchar(10) NOT NULL DEFAULT 'User'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`UserName`, `Password`) VALUES
-('a', '0cc175b9c0f1b6a831c399e269772661'),
-('c', '4a8a08f09d37b73795649038408b5f33'),
-('s', '03c7c0ace395d80182db07ae2c30f034');
+INSERT INTO `user` (`UserName`, `Password`, `Type`) VALUES
+('a', '0cc175b9c0f1b6a831c399e269772661', 'Admin'),
+('u', '7b774effe4a349c6dd82ad4f4f21d34c', 'User');
 
 -- --------------------------------------------------------
 
