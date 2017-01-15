@@ -4,7 +4,7 @@ session_start();
 if ($_POST['delete'] and $_SERVER['REQUEST_METHOD'] == "POST") {
     
     foreach ($_POST as $name => $content) { // Most people refer to $key => $value
-        $sql = "CALL delete_courier('".$content."' , '" . $_SESSION["UserName"] . "')";
+        $sql = "CALL delete_customer('".$content."' , '" . $_SESSION["UserName"] . "')";
         $result = mysqli_query($db,$sql);
     }
 } else if ($_SERVER["REQUEST_METHOD"] == "POST") {
