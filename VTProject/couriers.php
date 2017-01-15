@@ -13,15 +13,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $tc == '' || $firstname == '' || $lastname == '' || $phonenumber == '' || $ssn == '' || $office == '') {
         $error = 'At least one of the field is empty';
     } else {
-        $sql = "CALL insert_courier('" . $tc . "', '" . $firstname . "', '" . $lastname . "', '" . $phonenumber . "', '" . $ssn . "' , '" . $office . "')";
+        $sql = "CALL insert_courier('" . $tc . "', '" . $firstname . "', '" . $lastname . "', '" . $phonenumber . "', '" . $ssn . "' , '" . $office . "' , '" .$_SESSION["UserName"] . "')";
         $result = mysqli_query($db, $sql);
-        $count = mysqli_num_rows($result);
-        // If result matched $myusername and $mypassword, table row must be 1 row
-        if ($count == 1) {
-            $error = 'basarili giris.';
-        } else {
-            $error = 'Your Login Name or Password is invalid';
-        }
+        mysqli_free_result($result);
+        mysqli_next_result($db);
     }
 }
 ?>
