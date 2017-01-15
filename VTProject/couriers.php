@@ -1,33 +1,28 @@
 <?php
 include ("config.php");
 session_start();
- if($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // username and password sent from form 
     $tc = mysqli_real_escape_string($db, $_POST["tc"]);
     $firstname = mysqli_real_escape_string($db, $_POST["firstname"]);
     $lastname = mysqli_real_escape_string($db, $_POST["lastname"]);
     $phonenumber = mysqli_real_escape_string($db, $_POST["phonenumber"]);
     $ssn = mysqli_real_escape_string($db, $_POST["ssn"]);
-    $office = mysqli_real_escape_string($db, $_POST["office"]); 
-    if(ctype_space($tc) || ctype_space($firstname) || ctype_space($lastname) || ctype_space($phonenumber) || ctype_space($ssn) || ctype_space($office) ||
-            $tc == '' || $firstname == '' || $lastname == '' || $phonenumber == '' || $ssn  == '' || $office  == ''){
-		$error = 'At least one of the field is empty';
-
-	} else {
-		$sql = "CALL insert_courier('".$tc."', '".$firstname."', '".$lastname."', '".$phonenumber."', '".$ssn."' , '".$office."')";
-		$result = mysqli_query($db,$sql);
-		$count = mysqli_num_rows($result);
-		// If result matched $myusername and $mypassword, table row must be 1 row
-		if($count == 1) {
-                    $error =  'basarili giris.';
-		}
-		else {
-			$error = 'Your Login Name or Password is invalid';
-		}
-	}
-
-        
-       
+    $office = mysqli_real_escape_string($db, $_POST["office"]);
+    if (ctype_space($tc) || ctype_space($firstname) || ctype_space($lastname) || ctype_space($phonenumber) || ctype_space($ssn) || ctype_space($office) ||
+            $tc == '' || $firstname == '' || $lastname == '' || $phonenumber == '' || $ssn == '' || $office == '') {
+        $error = 'At least one of the field is empty';
+    } else {
+        $sql = "CALL insert_courier('" . $tc . "', '" . $firstname . "', '" . $lastname . "', '" . $phonenumber . "', '" . $ssn . "' , '" . $office . "')";
+        $result = mysqli_query($db, $sql);
+        $count = mysqli_num_rows($result);
+        // If result matched $myusername and $mypassword, table row must be 1 row
+        if ($count == 1) {
+            $error = 'basarili giris.';
+        } else {
+            $error = 'Your Login Name or Password is invalid';
+        }
+    }
 }
 ?>
 
@@ -83,36 +78,31 @@ session_start();
 
                 <div class="col-md-10">
                     <div class="content-box-large">
-                        <div class ="col-md-10">
-                            
-                            <form action="insert.php" method="post">
-                                <p>
-                                    <label for="SSN">SSN:</label>
-                                    <input type="text" name="ssn" id="ssn">
-                                </p>
-                                <p>
+                        <div class ="row ">
+                            <div class="col-md-3">
+                                <form action="" method="post">
+
+                                    <label for="tc">TCKN:</label>
+                                    <input class="form-control" type="text" name="tc" id="tc">
                                     <label for="firstName">First Name:</label>
-                                    <input type="text" name="firstname" id="firstName">
-                                </p>
-                                <p>
+                                    <input class="form-control" type="text" name="firstname" id="firstName">
                                     <label for="lastName">Last Name:</label>
-                                    <input type="text" name="lastname" id="lastName">
-                                </p>
-                                <p>
-                                    <label for="phoneNumber">Phone Number:</label>
-                                    <input type="text" name="phoneNumber" id="phoneNumber">
-                                </p>
-                                <p>  
+                                    <input class="form-control" type="text" name="lastname" id="lastName">
+                                    <label for="phonenumber">Phone Number:</label>
+                                    <input class="form-control" type="text" name="phonenumber" id="phonenumber">
+                                    <label for="ssn">SSN:</label>
+                                    <input class="form-control" type="text" name="ssn" id="ssn">
                                     <label for="office">Office:</label>
-                                    <input type="text" name="office" id="office">
-                                </p>
-                                <div class="action">
-                                    <input class="btn btn-primary signup" type = "submit" value = " Add Courier "/><br />
-                                </div>    
-                            </form>
-                            
+                                    <input class="form-control" type="text" name="office" id="office">
+
+                                    <div class="action">
+                                        <input class="btn btn-primary signup" type = "submit" value = " Add Courier "/><br />
+                                    </div>    
+                                </form>
+                            </div>
                         </div>
-                        <hr>
+                    </div>
+                    <div class="content-box-large">
 
 
 
@@ -132,7 +122,7 @@ session_start();
                                 <tbody>
                                     <?php
                                     include("config.php");
-                                    //$query = "select field1, fieldn from table [where clause][group by clause][order by clause][limit clause]";
+//$query = "select field1, fieldn from table [where clause][group by clause][order by clause][limit clause]";
                                     $query = "CALL get_drivers()";
                                     $result = mysqli_query($db, $query);
                                     while ($row = mysqli_fetch_assoc($result)) {
