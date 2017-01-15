@@ -1,7 +1,14 @@
 <?php
 include ("config.php");
 session_start();
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_POST['delete'] and $_SERVER['REQUEST_METHOD'] == "POST") {
+    echo $_POST['name'];
+    
+    foreach ($_POST as $name => $content) { // Most people refer to $key => $value
+        $sql = "CALL delete_courier('".$content."' , '" . $_SESSION["UserName"] . "')";
+        $result = mysqli_query($db,$sql);
+    }
+} else if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // username and password sent from form 
     $tc = mysqli_real_escape_string($db, $_POST["tc"]);
     $firstname = mysqli_real_escape_string($db, $_POST["firstname"]);
@@ -16,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql = "CALL insert_courier('" . $tc . "', '" . $firstname . "', '" . $lastname . "', '" . $phonenumber . "', '" . $ssn . "' , '" . $office . "' , '" .$_SESSION["UserName"] . "')";
         $result = mysqli_query($db, $sql);
     }
-}
+} else {}
 ?>
 
 <html><head>
@@ -123,7 +130,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         while ($row = mysqli_fetch_assoc($result)) {
                                             echo '<tr>';
                                             echo "<td>" . $row["TCKN"] . "</td> <td>" . $row["SSN"] . "</td> <td>" . $row["FirstName"] . "</td> <td>" . $row["LastName"] . "</td> <td>" . $row["PhoneNumber"] . "</td> <td>" . $row["Name"] . "</td>";
-                                            echo '</tr>';
+                                            echo '<form action="" method="post">';
+                                            echo "</td> <td> <input type ='submit' class='button' name='delete' value='Delete' /> "
+                                            . "<input type ='hidden' name='delete' value='".$row["TCKN"]."' /> </td>";
+                                            echo '</form>';
+                                            echo '</tr>';   
                                         }
                                         mysqli_free_result($result);
                                         mysqli_next_result($db);
