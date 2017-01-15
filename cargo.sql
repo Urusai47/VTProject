@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 15, 2017 at 07:27 PM
+-- Generation Time: Jan 15, 2017 at 09:16 PM
 -- Server version: 10.1.19-MariaDB
 -- PHP Version: 5.6.28
 
@@ -36,10 +36,10 @@ SELECT `TCKN` FROM `employee` WHERE `TCKN` = tc;
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_address` (IN `aid` VARCHAR(255), IN `u` VARCHAR(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_address` (IN `ai` VARCHAR(255))  BEGIN
 START TRANSACTION;
-DELETE FROM address WHERE `AddressID` = aid;
-CALL insert_log(CONCAT(u, ' deleted an address', ' with id ', aid));
+DELETE FROM address WHERE `AddressID` = ai;
+CALL insert_log(CONCAT(u, ' deleted an address', ' with id ', ai));
 COMMIT;
 END$$
 
@@ -75,7 +75,7 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_cargos` ()  BEGIN
 START TRANSACTION;
-SELECT * FROM cargo;
+SELECT c.`CargoID` as CargoID, c.`Price` as Price, dt.`Name` as DeliveryTypeName, c.`FK_Reciever_TCKN` as RecieverTC, c.`FK_Sender_TCKN` as SenderTC, c.`FK_Courier_TCKN` as CourierTC, o.`Name` as OfficeName FROM cargo c INNER JOIN deliverytype dt ON dt.`DeliveryTypeID` = c.`FK_DeliveryType_ID` INNER JOIN office o ON o.`OfficeID` = c.`FK_Office_ID`;
 COMMIT;
 END$$
 
@@ -397,6 +397,13 @@ CREATE TABLE `cargo` (
   `FK_Discount_DiscountID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `cargo`
+--
+
+INSERT INTO `cargo` (`CargoID`, `Price`, `isDelivered`, `FK_DeliveryType_ID`, `FK_Reciever_TCKN`, `FK_Sender_TCKN`, `FK_Courier_TCKN`, `FK_Office_ID`, `FK_Discount_DiscountID`) VALUES
+(2, 234, 0, 1, 4325345, 234324, 905469098, 1, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -412,10 +419,10 @@ CREATE TABLE `courier` (
 --
 
 INSERT INTO `courier` (`TCKN`) VALUES
-(234324),
-(723843),
-(4325345),
-(35539665642);
+(324234),
+(876678),
+(7658567),
+(905469098);
 
 -- --------------------------------------------------------
 
@@ -427,6 +434,15 @@ CREATE TABLE `customer` (
   `TCKN` bigint(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `customer`
+--
+
+INSERT INTO `customer` (`TCKN`) VALUES
+(234324),
+(4325345),
+(456698498);
+
 -- --------------------------------------------------------
 
 --
@@ -437,6 +453,13 @@ CREATE TABLE `deliverytype` (
   `DeliveryTypeID` int(11) NOT NULL,
   `Name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `deliverytype`
+--
+
+INSERT INTO `deliverytype` (`DeliveryTypeID`, `Name`) VALUES
+(1, 'Delivery Type 1');
 
 -- --------------------------------------------------------
 
@@ -485,12 +508,12 @@ CREATE TABLE `employee` (
 --
 
 INSERT INTO `employee` (`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES
-(234324, 213213, 1),
-(723843, 23478, 1),
-(4325345, 34598, 1),
-(58649898, 2147483647, 1),
+(324234, 435354345, 1),
+(876678, 5676755, 1),
+(7658567, 567567, 1),
+(90560760, 936509346, 1),
 (839443589, 34598, 1),
-(35539665642, 34324, 1);
+(905469098, 5489453, 1);
 
 -- --------------------------------------------------------
 
@@ -570,7 +593,7 @@ CREATE TABLE `insurancetypeinsurancecompany` (
 CREATE TABLE `log` (
   `LogID` int(11) NOT NULL,
   `Action` varchar(255) NOT NULL,
-  `Time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `Time` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -578,16 +601,27 @@ CREATE TABLE `log` (
 --
 
 INSERT INTO `log` (`LogID`, `Action`, `Time`) VALUES
-(11, 'c added a courier with id 123123', '2017-01-15 16:39:12'),
-(12, 'a added a courier with id 4325345', '2017-01-15 16:41:44'),
-(13, 'a added a courier with id 723843', '2017-01-15 16:46:39'),
-(14, 'a added a courier with id 234324', '2017-01-15 16:50:53'),
-(16, 'a deleted a driver with id 23123', '2017-01-15 19:56:52'),
-(17, 'a deleted a driver with id 35539665642', '2017-01-15 19:56:58'),
-(18, 'a added a courier with id 35539665642', '2017-01-15 19:59:58'),
-(19, 'a added a driver with id 456698498', '2017-01-15 20:33:42'),
-(20, 'a deleted a driver with id 456698498', '2017-01-15 21:20:25'),
-(21, 'a added a driver with id 839443589', '2017-01-15 21:20:34');
+(28, 'a deleted a courier with id 123345', '2017-01-15 21:35:32'),
+(29, 'a added a courier with id 65546', '2017-01-15 21:36:43'),
+(30, 'a deleted a courier with id 65546', '2017-01-15 21:37:22'),
+(31, 'a added a courier with id 324234', '2017-01-15 21:38:13'),
+(32, 'a added a courier with id 7658567', '2017-01-15 21:40:14'),
+(33, 'a added a courier with id 876678', '2017-01-15 21:40:27'),
+(34, 'a added a courier with id 905469098', '2017-01-15 21:40:57'),
+(35, 'a added an officer with id 90560760', '2017-01-15 21:42:22'),
+(36, ' deleted a driver with id 2', '2017-01-15 22:28:26'),
+(37, ' deleted a driver with id 2', '2017-01-15 22:28:27');
+
+--
+-- Triggers `log`
+--
+DELIMITER $$
+CREATE TRIGGER `log_before_insert` BEFORE INSERT ON `log` FOR EACH ROW BEGIN
+    SET NEW.Time = SYSDATE();
+
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -623,7 +657,7 @@ CREATE TABLE `officer` (
 --
 
 INSERT INTO `officer` (`TCKN`) VALUES
-(58649898);
+(90560760);
 
 -- --------------------------------------------------------
 
@@ -657,15 +691,22 @@ INSERT INTO `person` (`TCKN`, `FirstName`, `LastName`, `PhoneNumber`) VALUES
 (123, 'asd', 'asda', 123123),
 (12312, 'sdfsdf', 'sdfsdf', 234234),
 (23123, 'fsdsdf', 'sdfsdf', 123123),
+(65546, 'sdf', 'sdfsdf', 56456),
 (123123, 'asda', 'asdasd', 123123),
+(123345, 'ghdffgh', 'assda', 54343),
 (134234, 'asdasd', 'asdasd', 123123),
 (234324, 'sdffsd', 'dsfdsf', 123213),
+(324234, 'dfgdfg', 'dfgdfgdfg', 453354345),
 (723843, 'ashja', 'hgjghj', 23478),
+(876678, 'sgdsdf', 'sdfdsf', 657675657),
 (4325345, 'tgdhfji', 'dfgjmni', 4389),
+(7658567, 'sdsdf', 'dfgfdg', 678678678),
 (26894788, 'Boga', 'Boa', 4688945),
 (58649898, 'Bugra', 'Guler', 16585),
+(90560760, 'njaskdask', 'bkjsdfkbj', 983498345),
 (456698498, 'testee', 'steset', 342234),
 (839443589, 'dfgbjkfd', 'gbjksdfgjk', 34598),
+(905469098, 'bjksdfkbj', 'sdfgkbj', 8934598),
 (35539665642, 'Sanberk', 'Saticioglu', 654189);
 
 -- --------------------------------------------------------
@@ -973,12 +1014,12 @@ ALTER TABLE `address`
 -- AUTO_INCREMENT for table `cargo`
 --
 ALTER TABLE `cargo`
-  MODIFY `CargoID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `CargoID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `deliverytype`
 --
 ALTER TABLE `deliverytype`
-  MODIFY `DeliveryTypeID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `DeliveryTypeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `discount`
 --
@@ -998,7 +1039,7 @@ ALTER TABLE `employee`
 -- AUTO_INCREMENT for table `log`
 --
 ALTER TABLE `log`
-  MODIFY `LogID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `LogID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 --
 -- AUTO_INCREMENT for table `office`
 --
