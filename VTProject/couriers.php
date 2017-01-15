@@ -95,7 +95,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <input class="form-control" type="text" name="ssn" id="ssn">
                                     <label for="office">Office:</label>
                                     <input class="form-control" type="text" name="office" id="office">
-
+                                    <div style = "font-size:11px; color:#cc0000; margin-top:10px">
+                                        <?php echo $error; ?>
+                                    </div>
                                     <div class="action">
                                         <input class="btn btn-primary signup" type = "submit" value = " Add Courier "/><br />
                                     </div>    
