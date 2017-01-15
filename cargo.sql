@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 15, 2017 at 06:49 PM
+-- Generation Time: Jan 15, 2017 at 07:27 PM
 -- Server version: 10.1.19-MariaDB
 -- PHP Version: 5.6.28
 
@@ -466,7 +466,7 @@ CREATE TABLE `driver` (
 --
 
 INSERT INTO `driver` (`TCKN`, `FK_Driving_Plate`) VALUES
-(456698498, '4534512');
+(839443589, '1234512');
 
 -- --------------------------------------------------------
 
@@ -489,7 +489,7 @@ INSERT INTO `employee` (`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES
 (723843, 23478, 1),
 (4325345, 34598, 1),
 (58649898, 2147483647, 1),
-(456698498, 423234, 1),
+(839443589, 34598, 1),
 (35539665642, 34324, 1);
 
 -- --------------------------------------------------------
@@ -578,8 +578,6 @@ CREATE TABLE `log` (
 --
 
 INSERT INTO `log` (`LogID`, `Action`, `Time`) VALUES
-(8, 'a added a courier with id 12312', '2017-01-15 16:33:19'),
-(9, 'a added a courier with id 134234', '2017-01-15 16:35:26'),
 (11, 'c added a courier with id 123123', '2017-01-15 16:39:12'),
 (12, 'a added a courier with id 4325345', '2017-01-15 16:41:44'),
 (13, 'a added a courier with id 723843', '2017-01-15 16:46:39'),
@@ -587,7 +585,9 @@ INSERT INTO `log` (`LogID`, `Action`, `Time`) VALUES
 (16, 'a deleted a driver with id 23123', '2017-01-15 19:56:52'),
 (17, 'a deleted a driver with id 35539665642', '2017-01-15 19:56:58'),
 (18, 'a added a courier with id 35539665642', '2017-01-15 19:59:58'),
-(19, 'a added a driver with id 456698498', '2017-01-15 20:33:42');
+(19, 'a added a driver with id 456698498', '2017-01-15 20:33:42'),
+(20, 'a deleted a driver with id 456698498', '2017-01-15 21:20:25'),
+(21, 'a added a driver with id 839443589', '2017-01-15 21:20:34');
 
 -- --------------------------------------------------------
 
@@ -665,6 +665,7 @@ INSERT INTO `person` (`TCKN`, `FirstName`, `LastName`, `PhoneNumber`) VALUES
 (26894788, 'Boga', 'Boa', 4688945),
 (58649898, 'Bugra', 'Guler', 16585),
 (456698498, 'testee', 'steset', 342234),
+(839443589, 'dfgbjkfd', 'gbjksdfgjk', 34598),
 (35539665642, 'Sanberk', 'Saticioglu', 654189);
 
 -- --------------------------------------------------------
@@ -997,7 +998,7 @@ ALTER TABLE `employee`
 -- AUTO_INCREMENT for table `log`
 --
 ALTER TABLE `log`
-  MODIFY `LogID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `LogID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 --
 -- AUTO_INCREMENT for table `office`
 --
