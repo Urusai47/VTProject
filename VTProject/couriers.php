@@ -103,7 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                         </div>
                     </div>
-                    <div class ="col-md-7">
+                    <div class ="col-md-9">
                         <div class="content-box-large">
 
 
