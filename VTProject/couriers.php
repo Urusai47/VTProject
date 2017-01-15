@@ -1,3 +1,36 @@
+<?php
+include ("config.php");
+session_start();
+ if($_SERVER["REQUEST_METHOD"] == "POST") {
+    // username and password sent from form 
+    $tc = mysqli_real_escape_string($db, $_POST["tc"]);
+    $firstname = mysqli_real_escape_string($db, $_POST["firstname"]);
+    $lastname = mysqli_real_escape_string($db, $_POST["lastname"]);
+    $phonenumber = mysqli_real_escape_string($db, $_POST["phonenumber"]);
+    $ssn = mysqli_real_escape_string($db, $_POST["ssn"]);
+    $office = mysqli_real_escape_string($db, $_POST["office"]); 
+    if(ctype_space($tc) || ctype_space($firstname) || ctype_space($lastname) || ctype_space($phonenumber) || ctype_space($ssn) || ctype_space($office) ||
+            $tc == '' || $firstname == '' || $lastname == '' || $phonenumber == '' || $ssn  == '' || $office  == ''){
+		$error = 'At least one of the field is empty';
+
+	} else {
+		$sql = "CALL insert_courier('".$tc."', '".$firstname."', '".$lastname."', '".$phonenumber."', '".$ssn."' , '".$office."')";
+		$result = mysqli_query($db,$sql);
+		$count = mysqli_num_rows($result);
+		// If result matched $myusername and $mypassword, table row must be 1 row
+		if($count == 1) {
+                    $error =  'basarili giris.';
+		}
+		else {
+			$error = 'Your Login Name or Password is invalid';
+		}
+	}
+
+        
+       
+}
+?>
+
 <html><head>
         <title>Bootstrap Admin Theme v3</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,7 +59,7 @@
 
         <div class="page-content">
             <div class="row">
-                 <div class="col-md-2">
+                <div class="col-md-2">
                     <div class="sidebar content-box" style="display: block;">
                         <ul class="nav">
                             <!-- Main menu -->
@@ -50,9 +83,40 @@
 
                 <div class="col-md-10">
                     <div class="content-box-large">
-                        <div class="panel-heading">
-                            <div class="panel-title">Courier</div>
+                        <div class ="col-md-10">
+                            
+                            <form action="insert.php" method="post">
+                                <p>
+                                    <label for="SSN">SSN:</label>
+                                    <input type="text" name="ssn" id="ssn">
+                                </p>
+                                <p>
+                                    <label for="firstName">First Name:</label>
+                                    <input type="text" name="firstname" id="firstName">
+                                </p>
+                                <p>
+                                    <label for="lastName">Last Name:</label>
+                                    <input type="text" name="lastname" id="lastName">
+                                </p>
+                                <p>
+                                    <label for="phoneNumber">Phone Number:</label>
+                                    <input type="text" name="phoneNumber" id="phoneNumber">
+                                </p>
+                                <p>  
+                                    <label for="office">Office:</label>
+                                    <input type="text" name="office" id="office">
+                                </p>
+                                <div class="action">
+                                    <input class="btn btn-primary signup" type = "submit" value = " Add Courier "/><br />
+                                </div>    
+                            </form>
+                            
                         </div>
+                        <hr>
+
+
+
+
                         <div class="panel-body">
                             <table class="table table-striped table-bordered" id="example" cellspacing="0" cellpadding="0" border="0">
                                 <thead>
@@ -83,11 +147,11 @@
                             </table>
                         </div>
                     </div>
-                 </div>
-                
+                </div>
+
             </div>
         </div>
-        
+
 
         <link href="vendors/datatables/dataTables.bootstrap.css" rel="stylesheet" media="screen">
 
@@ -104,5 +168,5 @@
 
         <script src="js/custom.js"></script>
         <script src="js/tables.js"></script>
-    
-</body></html>
+
+    </body></html>
