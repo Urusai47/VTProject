@@ -78,7 +78,7 @@ else {}
                             <li class="current"><a href="customers.php"><i class="glyphicon glyphicon-user"></i> Customers</a></li>
                             <li class="current"><a href="deliveryTypes.php"><i class="glyphicon glyphicon-upload"></i> Delivery Type</a></li>
                             <li class="current"><a href="discounts.php"><i class="glyphicon glyphicon-usd"></i> Discounts </a></li>
-                            
+                            <li class="current"><a href="feedbacks.php"><i class="glyphicon glyphicon-thumbs-up"></i> Feedbacks </a></li>
                         </ul>
                     </div>
                 </div>
