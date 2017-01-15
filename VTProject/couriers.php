@@ -1,43 +1,24 @@
 <?php
 include ("config.php");
 session_start();
-
-if ($_POST['delete'] and $_SERVER['REQUEST_METHOD'] == "POST") {
-    echo $_POST['name'];
-    
-    foreach ($_POST as $name => $content) { // Most people refer to $key => $value
-        $sql = "CALL delete_driver('".$content."' , '" . $_SESSION["UserName"] . "')";
-        $result = mysqli_query($db,$sql);
-    }
-} 
-else if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // username and password sent from form 
     $tc = mysqli_real_escape_string($db, $_POST["tc"]);
     $firstname = mysqli_real_escape_string($db, $_POST["firstname"]);
     $lastname = mysqli_real_escape_string($db, $_POST["lastname"]);
     $phonenumber = mysqli_real_escape_string($db, $_POST["phonenumber"]);
     $ssn = mysqli_real_escape_string($db, $_POST["ssn"]);
     $office = mysqli_real_escape_string($db, $_POST["office"]);
-    $carplate = mysqli_real_escape_string($db, $_POST["carplate"]);
-    if (ctype_space($tc) || ctype_space($firstname) || ctype_space($lastname) || ctype_space($phonenumber) || ctype_space($ssn) || ctype_space($office) || ctype_space($carplate) ||
-        $tc == '' || $firstname == '' || $lastname == '' || $phonenumber == '' || $ssn == '' || $office == '' || $carplate == '') {
+    if (ctype_space($tc) || ctype_space($firstname) || ctype_space($lastname) || ctype_space($phonenumber) || ctype_space($ssn) || ctype_space($office) ||
+            $tc == '' || $firstname == '' || $lastname == '' || $phonenumber == '' || $ssn == '' || $office == '') {
         $error = 'At least one of the field is empty';
-    }  else {
-        $sql = "CALL checkIfAlreadyEmployee('".$tc."')";
-	$result = mysqli_query($db,$sql);
-	$count = mysqli_num_rows($result);
-        mysqli_free_result($result);
-        mysqli_next_result($db);
-        if($count > 0){
-            $error = 'This person is already an employee';
-        } else {
-             $sql = "CALL insert_driver('" . $tc . "', '" . $firstname . "', '" . $lastname . "', '" . $phonenumber . "', '" . $ssn . "' , '" . $office . "' , '" . $carplate . "' , '" . $_SESSION["UserName"] . "')";
-             $result = mysqli_query($db, $sql);
-        }
+    } else {
+        $sql = "CALL insert_courier('" . $tc . "', '" . $firstname . "', '" . $lastname . "', '" . $phonenumber . "', '" . $ssn . "' , '" . $office . "' , '" .$_SESSION["UserName"] . "')";
+        $result = mysqli_query($db, $sql);
     }
-} 
-else {}
+}
 ?>
+
 <html><head>
         <title>Bootstrap Admin Theme v3</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -48,18 +29,16 @@ else {}
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <!-- styles -->
         <link href="css/styles.css" rel="stylesheet">
-
     </head>
 
     <body>
-
         <div class="header">
             <div class="container">
                 <div class="row">
                     <div class="col-md-5">
                         <!-- Logo -->
                         <div class="logo">
-                            <h1><a href="drivers.php">Drivers</a></h1>
+                            <h1><a href="couriers.php">Couriers</a></h1>
                         </div>
                     </div>             
                 </div>
@@ -94,7 +73,9 @@ else {}
                     <div class="col-md-3">
                         <div class="content-box-large">
                             <div class ="row ">
-                                <form action="" method="post">  
+
+                                <form action="" method="post">
+
                                     <label for="tc">TCKN:</label>
                                     <input class="form-control" type="text" name="tc" id="tc">
                                     <label for="firstName">First Name:</label>
@@ -107,19 +88,19 @@ else {}
                                     <input class="form-control" type="text" name="ssn" id="ssn">
                                     <label for="office">Office:</label>
                                     <input class="form-control" type="text" name="office" id="office">
-                                    <label for="carplate">Car Plate:</label>
-                                    <input class="form-control" type="text" name="carplate" id="carplate">
                                     <div style = "font-size:11px; color:#cc0000; margin-top:10px">
                                         <?php echo $error; ?>
                                     </div>
                                     <div class="action">
-                                        <input class="btn btn-primary signup" type = "submit" value = " Add Driver "/><br />
+                                        <input class="btn btn-primary signup" type = "submit" value = " Add Courier "/><br />
                                     </div>    
                                 </form>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-9">
+                    
+                    
+                    <div class ="col-md-9">
                         <div class="content-box-large">
                             <div class="panel-body">
                                 <table class="table table-striped table-bordered" id="example" cellspacing="0" cellpadding="0" border="0">
@@ -131,35 +112,23 @@ else {}
                                             <th>LastName</th>
                                             <th>PhoneNumber</th>
                                             <th>Office</th>
-                                            <th>Plate</th>
-                                            <th>Operations</th>
                                         </tr>
                                     </thead>
-                                     
                                     <tbody>
-                                        
                                         <?php
                                         include("config.php");
-                                        //$query = "select field1, fieldn from table [where clause][group by clause][order by clause][limit clause]";
-                                        $query = "CALL get_drivers()";
+//$query = "select field1, fieldn from table [where clause][group by clause][order by clause][limit clause]";
+                                        $query = "CALL get_couriers()";
                                         $result = mysqli_query($db, $query);
                                         while ($row = mysqli_fetch_assoc($result)) {
                                             echo '<tr>';
-                                            echo "<td>" . $row["TCKN"] . "</td> <td>" . $row["SSN"] . "</td> <td>" . $row["FirstName"] 
-                                                    . "</td> <td>" . $row["LastName"] . "</td> <td>" . $row["PhoneNumber"] 
-                                                    . "</td> <td>" . $row["Name"] . "</td> <td>" . $row["FK_Driving_Plate"] ;
-                                            echo '<form action="" method="post">';
-                                            echo "</td> <td> <input type ='submit' class='button' name='delete' value='Delete' /> "
-                                            . "<input type ='hidden' name='delete' value='".$row["TCKN"]."' /> </td>";
-                                            echo '</form>';
-                                            echo '</tr>';                                  
+                                            echo "<td>" . $row["TCKN"] . "</td> <td>" . $row["SSN"] . "</td> <td>" . $row["FirstName"] . "</td> <td>" . $row["LastName"] . "</td> <td>" . $row["PhoneNumber"] . "</td> <td>" . $row["Name"] . "</td>";
+                                            echo '</tr>';
                                         }
                                         mysqli_free_result($result);
                                         mysqli_next_result($db);
-                                        ?>  
-                                        
+                                        ?>                            
                                     </tbody>
-                                    
                                 </table>
                             </div>
                         </div>
