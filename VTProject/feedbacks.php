@@ -102,12 +102,19 @@ else {}
                                     <label for="message">Message:</label>
                                     <input class="form-control" type="text" name="message" id="message">
                                     <br>
-                                    <input class="btn btn-default" id="file" type="file" name = "file">
-                                    <br>
                                     <div class="action">
                                         <input class="btn btn-primary signup" type = "submit" value = "Add Feedback"/><br />
                                     </div>    
                                 </form>
+                                
+                                <br>
+                                    <form action="upload.php" method="post" enctype="multipart/form-data">
+                                        <label for="message">Message:</label>
+                                        <input type="file" name="fileToUpload" id="fileToUpload">
+                                        <input type="submit" value="Upload Image" name="submit">
+                                    </form>
+                                    <br>
+                                    
                             </div>
                         </div>
                     </div>
