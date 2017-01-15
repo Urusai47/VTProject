@@ -11,13 +11,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $office = mysqli_real_escape_string($db, $_POST["office"]);
     $carplate = mysqli_real_escape_string($db, $_POST["carplate"]);
     if (ctype_space($tc) || ctype_space($firstname) || ctype_space($lastname) || ctype_space($phonenumber) || ctype_space($ssn) || ctype_space($office) || ctype_space($carplate) ||
-            $tc == '' || $firstname == '' || $lastname == '' || $phonenumber == '' || $ssn == '' || $office == '' || $carplate == '') {
+        $tc == '' || $firstname == '' || $lastname == '' || $phonenumber == '' || $ssn == '' || $office == '' || $carplate == '') {
         $error = 'At least one of the field is empty';
-    } 
-    else {
-        $sql = "CALL insert_driver('" . $tc . "', '" . $firstname . "', '" . $lastname . "', '" . $phonenumber . "', '" . $ssn . "' , '" . $office . "' , '" . $carplate . "' , '" . $_SESSION["UserName"] . "')";
-        echo $sql;
-        $result = mysqli_query($db, $sql);
+    }  else {
+        $sql = "CALL checkIfAlreadyEmployee('".$tc."')";
+	$result = mysqli_query($db,$sql);
+	$count = mysqli_num_rows($result);
+        mysqli_free_result($result);
+        mysqli_next_result($db);
+        if($count > 0){
+            $error = 'This person is already an employee';
+        } else {
+             $sql = "CALL insert_driver('" . $tc . "', '" . $firstname . "', '" . $lastname . "', '" . $phonenumber . "', '" . $ssn . "' , '" . $office . "' , '" . $carplate . "' , '" . $_SESSION["UserName"] . "')";
+             $result = mysqli_query($db, $sql);
+        }
     }
 }
 ?>

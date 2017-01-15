@@ -14,8 +14,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $tc == '' || $firstname == '' || $lastname == '' || $phonenumber == '' || $ssn == '' || $office == '') {
         $error = 'At least one of the field is empty';
     } else {
-        $sql = "CALL insert_officer('" . $tc . "', '" . $firstname . "', '" . $lastname . "', '" . $phonenumber . "', '" . $ssn . "' , '" . $office . "' , '" . $_SESSION["UserName"] . "')";
-        $result = mysqli_query($db, $sql);
+        $sql = "CALL checkIfAlreadyEmployee('".$tc."')";
+	$result = mysqli_query($db,$sql);
+	$count = mysqli_num_rows($result);
+        mysqli_free_result($result);
+        mysqli_next_result($db);
+        if($count > 0){
+            $error = 'This person is already an employee';
+        } else {
+             $sql = "CALL insert_driver('" . $tc . "', '" . $firstname . "', '" . $lastname . "', '" . $phonenumber . "', '" . $ssn . "' , '" . $office . "' , '" . $carplate . "' , '" . $_SESSION["UserName"] . "')";
+             $result = mysqli_query($db, $sql);
+        }
     }
 }
 ?>
