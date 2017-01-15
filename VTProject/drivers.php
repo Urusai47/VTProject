@@ -1,24 +1,17 @@
 <?php
 include ("config.php");
 session_start();
-    function select()
-    {
-       echo "The select function is called.";
+
+if ($_POST['delete'] and $_SERVER['REQUEST_METHOD'] == "POST") {
+    echo $_POST['name'];
+    
+    foreach ($_POST as $name => $content) { // Most people refer to $key => $value
+        echo "The HTML name: $name <br>";
+        echo "The content of it: $content <br>";
     }
-    function insert()
-    {
-       echo "The insert function is called.";
-    }
-if($_POST['select'] and $_SERVER['REQUEST_METHOD'] == "POST"){
-    select();
-} else if($_POST['insert'] and $_SERVER['REQUEST_METHOD'] == "POST"){
-    insert();
-} else 
-
-
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // username and password sent from form 
+} 
+else if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    
     $tc = mysqli_real_escape_string($db, $_POST["tc"]);
     $firstname = mysqli_real_escape_string($db, $_POST["firstname"]);
     $lastname = mysqli_real_escape_string($db, $_POST["lastname"]);
@@ -42,7 +35,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
              $result = mysqli_query($db, $sql);
         }
     }
-} else {}
+} 
+else {}
 ?>
 <html><head>
         <title>Bootstrap Admin Theme v3</title>
@@ -101,8 +95,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <div class="content-box-large">
                             <div class ="row ">
                                 <form action="" method="post">  
-                                    <input type="submit" class="button" name="insert" value="insert" />
-                                    <input type="submit" class="button" name="select" value="select" />  
                                     <label for="tc">TCKN:</label>
                                     <input class="form-control" type="text" name="tc" id="tc">
                                     <label for="firstName">First Name:</label>
@@ -140,9 +132,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             <th>PhoneNumber</th>
                                             <th>Office</th>
                                             <th>Plate</th>
+                                            <th>Operations</th>
                                         </tr>
                                     </thead>
+                                     
                                     <tbody>
+                                        
                                         <?php
                                         include("config.php");
                                         //$query = "select field1, fieldn from table [where clause][group by clause][order by clause][limit clause]";
@@ -150,13 +145,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         $result = mysqli_query($db, $query);
                                         while ($row = mysqli_fetch_assoc($result)) {
                                             echo '<tr>';
-                                            echo "<td>" . $row["TCKN"] . "</td> <td>" . $row["SSN"] . "</td> <td>" . $row["FirstName"] . "</td> <td>" . $row["LastName"] . "</td> <td>" . $row["PhoneNumber"] . "</td> <td>" . $row["Name"] . "</td> <td>" . $row["FK_Driving_Plate"] . "</td>";
-                                            echo '</tr>';
+                                            echo "<td>" . $row["TCKN"] . "</td> <td>" . $row["SSN"] . "</td> <td>" . $row["FirstName"] 
+                                                    . "</td> <td>" . $row["LastName"] . "</td> <td>" . $row["PhoneNumber"] 
+                                                    . "</td> <td>" . $row["Name"] . "</td> <td>" . $row["FK_Driving_Plate"] ;
+                                            echo '<form action="" method="post">';
+                                            echo "</td> <td> <input type ='submit' class='button' name='delete' value='Delete' /> "
+                                            . "<input type ='hidden' name='delete' value='".$row["TCKN"]."' /> </td>";
+                                            echo '</form>';
+                                            echo '</tr>';                                  
                                         }
                                         mysqli_free_result($result);
                                         mysqli_next_result($db);
-                                        ?>                            
+                                        ?>  
+                                        
                                     </tbody>
+                                    
                                 </table>
                             </div>
                         </div>
