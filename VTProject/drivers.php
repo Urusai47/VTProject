@@ -1,6 +1,22 @@
 <?php
 include ("config.php");
 session_start();
+    function select()
+    {
+       echo "The select function is called.";
+    }
+    function insert()
+    {
+       echo "The insert function is called.";
+    }
+if($_POST['select'] and $_SERVER['REQUEST_METHOD'] == "POST"){
+    select();
+} else if($_POST['insert'] and $_SERVER['REQUEST_METHOD'] == "POST"){
+    insert();
+} else 
+
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // username and password sent from form 
     $tc = mysqli_real_escape_string($db, $_POST["tc"]);
@@ -26,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
              $result = mysqli_query($db, $sql);
         }
     }
-}
+} else {}
 ?>
 <html><head>
         <title>Bootstrap Admin Theme v3</title>
@@ -38,9 +54,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <!-- styles -->
         <link href="css/styles.css" rel="stylesheet">
+
     </head>
 
     <body>
+
         <div class="header">
             <div class="container">
                 <div class="row">
@@ -82,9 +100,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="col-md-3">
                         <div class="content-box-large">
                             <div class ="row ">
-
-                                <form action="" method="post">
-
+                                <form action="" method="post">  
+                                    <input type="submit" class="button" name="insert" value="insert" />
+                                    <input type="submit" class="button" name="select" value="select" />  
                                     <label for="tc">TCKN:</label>
                                     <input class="form-control" type="text" name="tc" id="tc">
                                     <label for="firstName">First Name:</label>
