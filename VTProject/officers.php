@@ -39,7 +39,7 @@
                 <div class="col-md-10">
                     <div class="content-box-large">
                         <div class="panel-heading">
-                            <div class="panel-title">Driver</div>
+                            <div class="panel-title">Officers</div>
                         </div>
                         <div class="panel-body">
                             <table class="table table-striped table-bordered" id="example" cellspacing="0" cellpadding="0" border="0">
@@ -51,7 +51,6 @@
                                         <th>LastName</th>
                                         <th>PhoneNumber</th>
                                         <th>Office</th>
-                                        <th>Plate</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -62,7 +61,7 @@
                                     $result = mysqli_query($db, $query);
                                     while ($row = mysqli_fetch_assoc($result)) {
                                         echo '<tr>';
-                                        echo "<td>" . $row["TCKN"] . "</td> <td>" . $row["SSN"] . "</td> <td>" . $row["FirstName"] . "</td> <td>" . $row["LastName"] . "</td> <td>" . $row["PhoneNumber"] . "</td> <td>" . $row["FK_Office_OfficeID"] . "</td> <td>"  . $row["FK_Driving_Plate"] . "</td>";
+                                        echo "<td>" . $row["TCKN"] . "</td> <td>" . $row["SSN"] . "</td> <td>" . $row["FirstName"] . "</td> <td>" . $row["LastName"] . "</td> <td>" . $row["PhoneNumber"] . "</td> <td>" . $row["FK_Office_OfficeID"] . "</td>";
                                         echo '</tr>';
                                     }
                                     mysqli_free_result($result);
