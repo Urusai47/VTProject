@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="col-md-5">
                         <!-- Logo -->
                         <div class="logo">
-                            <h1><a href="index.html">Employee</a></h1>
+                            <h1><a href="couriers.php">Couriers</a></h1>
                         </div>
                     </div>             
                 </div>
