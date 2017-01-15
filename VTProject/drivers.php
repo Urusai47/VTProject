@@ -113,7 +113,7 @@ else {}
                                         $query = "CALL get_offices()";
                                         $result = mysqli_query($db, $query);
                                         while ($row = mysqli_fetch_assoc($result)) {
-                                            echo "<option value=\"owner1\">" . $row['Name'] . "</option>";
+                                            echo "<option value= " . $row['Name'] . ">" . $row['Name'] . "</option>";
                                         }
                                          mysqli_free_result($result);
                                          mysqli_next_result($db);
@@ -127,7 +127,7 @@ else {}
                                         $query = "CALL get_vehicles()";
                                         $result = mysqli_query($db, $query);
                                         while ($row = mysqli_fetch_assoc($result)) {
-                                            echo "<option value=\"owner1\">" . $row['Plate'] . "</option>";
+                                            echo "<option value= " . $row['Plate'] . ">" . $row['Plate'] . "</option>";
                                         }
                                          mysqli_free_result($result);
                                          mysqli_next_result($db);
