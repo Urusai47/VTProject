@@ -75,6 +75,9 @@ else {}
                                 </ul>
                             </li>
                             <li class="current"><a href="addresses.php"><i class="glyphicon glyphicon-road"></i> Addresses</a></li>
+                            <li class="current"><a href="cargo.php"><i class="glyphicon glyphicon-inbox"></i> Cargo</a></li>
+                            <li class="current"><a href="customers.php"><i class="glyphicon glyphicon-user"></i> Customers</a></li>
+                            <li class="current"><a href="deliveryTypes.php"><i class="glyphicon glyphicon-upload"></i> Delivery Type</a></li>
                         </ul>
                     </div>
                 </div>
@@ -121,7 +124,7 @@ else {}
                                         $result = mysqli_query($db, $query);
                                         while ($row = mysqli_fetch_assoc($result)) {
                                             echo '<tr>';
-                                            echo "<td>" . $row["Type"] . "</td> <td>" . $row["FullAddress"] ;
+                                            echo "<td>" . $row["Type"] . "</td> <td>" . $row["FullAddress"] . "</td>" ;
                                             echo '</tr>';                                  
                                         }
                                         mysqli_free_result($result);
