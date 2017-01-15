@@ -69,7 +69,7 @@
                                     <?php
                                     include("config.php");
                                     //$query = "select field1, fieldn from table [where clause][group by clause][order by clause][limit clause]";
-                                    $query = "CALL get_drivers()";
+                                    $query = "CALL get_officers()";
                                     $result = mysqli_query($db, $query);
                                     while ($row = mysqli_fetch_assoc($result)) {
                                         echo '<tr>';

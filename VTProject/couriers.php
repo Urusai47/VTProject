@@ -15,8 +15,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $sql = "CALL insert_courier('" . $tc . "', '" . $firstname . "', '" . $lastname . "', '" . $phonenumber . "', '" . $ssn . "' , '" . $office . "' , '" .$_SESSION["UserName"] . "')";
         $result = mysqli_query($db, $sql);
-        mysqli_free_result($result);
-        mysqli_next_result($db);
     }
 }
 ?>
@@ -122,7 +120,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         <?php
                                         include("config.php");
 //$query = "select field1, fieldn from table [where clause][group by clause][order by clause][limit clause]";
-                                        $query = "CALL get_drivers()";
+                                        $query = "CALL get_couriers()";
                                         $result = mysqli_query($db, $query);
                                         while ($row = mysqli_fetch_assoc($result)) {
                                             echo '<tr>';
