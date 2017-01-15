@@ -77,9 +77,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
                 <div class="col-md-10">
-                    <div class="content-box-large">
-                        <div class ="row ">
-                            <div class="col-md-3">
+                    <div class="col-md-3">
+                        <div class="content-box-large">
+                            <div class ="row ">
+
                                 <form action="" method="post">
 
                                     <label for="tc">TCKN:</label>
@@ -102,39 +103,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                         </div>
                     </div>
-                    <div class="content-box-large">
+                    <div class ="col-md-7">
+                        <div class="content-box-large">
 
 
 
 
-                        <div class="panel-body">
-                            <table class="table table-striped table-bordered" id="example" cellspacing="0" cellpadding="0" border="0">
-                                <thead>
-                                    <tr>
-                                        <th>TCKN</th>
-                                        <th>SSN</th>
-                                        <th>FirstName</th>
-                                        <th>LastName</th>
-                                        <th>PhoneNumber</th>
-                                        <th>Office</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    include("config.php");
+                            <div class="panel-body">
+                                <table class="table table-striped table-bordered" id="example" cellspacing="0" cellpadding="0" border="0">
+                                    <thead>
+                                        <tr>
+                                            <th>TCKN</th>
+                                            <th>SSN</th>
+                                            <th>FirstName</th>
+                                            <th>LastName</th>
+                                            <th>PhoneNumber</th>
+                                            <th>Office</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        include("config.php");
 //$query = "select field1, fieldn from table [where clause][group by clause][order by clause][limit clause]";
-                                    $query = "CALL get_drivers()";
-                                    $result = mysqli_query($db, $query);
-                                    while ($row = mysqli_fetch_assoc($result)) {
-                                        echo '<tr>';
-                                        echo "<td>" . $row["TCKN"] . "</td> <td>" . $row["SSN"] . "</td> <td>" . $row["FirstName"] . "</td> <td>" . $row["LastName"] . "</td> <td>" . $row["PhoneNumber"] . "</td> <td>" . $row["Name"] . "</td>";
-                                        echo '</tr>';
-                                    }
-                                    mysqli_free_result($result);
-                                    mysqli_next_result($db);
-                                    ?>                            
-                                </tbody>
-                            </table>
+                                        $query = "CALL get_drivers()";
+                                        $result = mysqli_query($db, $query);
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo '<tr>';
+                                            echo "<td>" . $row["TCKN"] . "</td> <td>" . $row["SSN"] . "</td> <td>" . $row["FirstName"] . "</td> <td>" . $row["LastName"] . "</td> <td>" . $row["PhoneNumber"] . "</td> <td>" . $row["Name"] . "</td>";
+                                            echo '</tr>';
+                                        }
+                                        mysqli_free_result($result);
+                                        mysqli_next_result($db);
+                                        ?>                            
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
