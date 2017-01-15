@@ -8,19 +8,20 @@ session_start();
     $username = mysqli_real_escape_string($db, $_POST["username"]);
     $password = mysqli_real_escape_string($db, $_POST["password"]);
     $passwordConfirm = mysqli_real_escape_string($db, $_POST["passwordConfirm"]);
-    if(ctype_space($username) || ctype_space($password) || $username == '' || $password == ''){
-            $error = 'Username or password is empty';
+    $email = mysqli_real_escape_string($db, $_POST["email"]);
+    if(ctype_space($username) || ctype_space($password) || $username == '' || $password == '' || ctype_space($email) || $email == ''){
+            $error = 'One of the fields is empty';
 	} else {
             if($password === $passwordConfirm){
-                $sql = "CALL checkDuplicateUser('".$username."')";
+                $sql = "CALL checkDuplicateUser('".$username."', '" . $email . "')";
                 $result = mysqli_query($db, $sql);
 		$count = mysqli_num_rows($result);
                 mysqli_free_result($result);
                 mysqli_next_result($db);
                 if( $count == 1 ){
-                    $error = 'username exists';
+                    $error = 'username or email exists';
 		} else {
-                    $insertSql = "CALL insert_user('".$username."','".$password."')";
+                    $insertSql = "CALL insert_user('".$username."','".$password."', '" .$email . "')";
                     if(mysqli_query($db,$insertSql)) {
                         $error = 'success';
                     }else {
@@ -68,7 +69,8 @@ session_start();
 			            <div class="content-wrap">
 			                <h6>Sign Up</h6>
                                         
-                                        <form action = "" method = "post">                                            
+                                        <form action = "" method = "post">
+                                            <input class="form-control" type = "email" name = "email" class = "box" placeholder ="Email"/><br>
                                             <input class="form-control" type = "text" name = "username" class = "box" placeholder ="Username"/>
                                             <input class="form-control" type = "password" name = "password" class = "box" placeholder = "Password">
                                             <input class="form-control" type = "password" name = "passwordConfirm" class = "box" placeholder = "Confirm Password">
