@@ -143,7 +143,6 @@ else {}
                                             <th>Sender</th>
                                             <th>Courier</th>
                                             <th>Office</th>
-                                            <th>Discount</th>
                                             <th>Operations</th>
                                         </tr>
                                     </thead>
@@ -159,15 +158,15 @@ else {}
                                             echo '<tr>';
                                             
                                             
-                                            echo "<td>" . $row["TCKN"] . "</td> <td>" . $row["SSN"] . "</td> <td>" . $row["FirstName"] 
-                                                    . "</td> <td>" . $row["LastName"] . "</td> <td>" . $row["PhoneNumber"] 
-                                                    . "</td> <td>" . $row["Name"] . "</td> <td>" . $row["FK_Driving_Plate"] ;
+                                            echo "<td>" . $row["Price"] . "</td> <td>" . $row["DeliveryTypeName"] . "</td> <td>" . $row["RecieverTC"] 
+                                                    . "</td> <td>" . $row["SenderTC"] . "</td> <td>" . $row["CourierTC"] 
+                                                    . "</td> <td>" . $row["OfficeName"] . "</td>";
                                             
                                             
                                             
                                             echo '<form action="" method="post">';
                                             echo "</td> <td> <input type ='submit' class='button' name='delete' value='Delete' /> "
-                                            . "<input type ='hidden' name='delete' value='".$row["TCKN"]."' /> </td>";
+                                            . "<input type ='hidden' name='delete' value='".$row["CargoID"]."' /> </td>";
                                             echo '</form>';
                                             echo '</tr>';                                  
                                         }
