@@ -14,7 +14,7 @@ else if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $customertckn = mysqli_real_escape_string($db, $_POST["customertckn"]);
     $score = mysqli_real_escape_string($db, $_POST["score"]);
     $message = mysqli_real_escape_string($db, $_POST["message"]);
-    
+    $path = mysqli_real_escape_string($db, $_POST["file"]);
     
     if (ctype_space($customertckn) || ctype_space($score) || ctype_space($message)  ||
             $customertckn == '' || $score == '' || $message == '' ){
@@ -101,6 +101,9 @@ else {}
                                     <input class="form-control" type="text" name="score" id="score">
                                     <label for="message">Message:</label>
                                     <input class="form-control" type="text" name="message" id="message">
+                                    <br>
+                                    <input class="btn btn-default" id="file" type="file" name = "file">
+                                    <br>
                                     <div class="action">
                                         <input class="btn btn-primary signup" type = "submit" value = "Add Feedback"/><br />
                                     </div>    
