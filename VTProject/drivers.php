@@ -105,10 +105,35 @@ else {}
                                     <input class="form-control" type="text" name="phonenumber" id="phonenumber">
                                     <label for="ssn">SSN:</label>
                                     <input class="form-control" type="text" name="ssn" id="ssn">
+                                    
                                     <label for="office">Office:</label>
-                                    <input class="form-control" type="text" name="office" id="office">
+                                    <select name="office">
+                                        <?php
+                                        include("config.php");
+                                        $query = "CALL get_offices()";
+                                        $result = mysqli_query($db, $query);
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo "<option value=\"owner1\">" . $row['Name'] . "</option>";
+                                        }
+                                         mysqli_free_result($result);
+                                         mysqli_next_result($db);
+                                        ?>
+                                    </select>
+                                    <br />
                                     <label for="carplate">Car Plate:</label>
-                                    <input class="form-control" type="text" name="carplate" id="carplate">
+                                       <select name="carplate">
+                                        <?php
+                                        include("config.php");
+                                        $query = "CALL get_vehicles()";
+                                        $result = mysqli_query($db, $query);
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo "<option value=\"owner1\">" . $row['Plate'] . "</option>";
+                                        }
+                                         mysqli_free_result($result);
+                                         mysqli_next_result($db);
+                                        ?>
+                                    </select>
+                                    <br />
                                     <div style = "font-size:11px; color:#cc0000; margin-top:10px">
                                         <?php echo $error; ?>
                                     </div>

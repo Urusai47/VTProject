@@ -94,7 +94,19 @@ if ($_POST['delete'] and $_SERVER['REQUEST_METHOD'] == "POST") {
                                     <label for="ssn">SSN:</label>
                                     <input class="form-control" type="text" name="ssn" id="ssn">
                                     <label for="office">Office:</label>
-                                    <input class="form-control" type="text" name="office" id="office">
+                                    <select name="office">
+                                        <?php
+                                        include("config.php");
+                                        $query = "CALL get_offices()";
+                                        $result = mysqli_query($db, $query);
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo "<option value=\"owner1\">" . $row['Name'] . "</option>";
+                                        }
+                                         mysqli_free_result($result);
+                                         mysqli_next_result($db);
+                                        ?>
+                                    </select>
+                                    <br />
                                     <div style = "font-size:11px; color:#cc0000; margin-top:10px">
                                         <?php echo $error; ?>
                                     </div>
