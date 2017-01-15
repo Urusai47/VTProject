@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 15, 2017 at 01:19 PM
+-- Generation Time: Jan 15, 2017 at 01:32 PM
 -- Server version: 10.1.19-MariaDB
 -- PHP Version: 5.6.28
 
@@ -44,7 +44,7 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_couriers` ()  BEGIN
 START TRANSACTION;
-SELECT * FROM courier NATURAL JOIN Employee NATURAL JOIN Person;
+SELECT * FROM courier NATURAL JOIN Employee NATURAL JOIN Person INNER JOIN office ON office.`OfficeID` = `FK_Office_OfficeID`;
 COMMIT;
 END$$
 
@@ -68,7 +68,7 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_drivers` ()  BEGIN
 START TRANSACTION;
-SELECT * FROM driver NATURAL JOIN Employee NATURAL JOIN Person;
+SELECT * FROM driver NATURAL JOIN Employee NATURAL JOIN Person INNER JOIN office ON office.`OfficeID` = `FK_Office_OfficeID`;
 COMMIT;
 END$$
 
@@ -106,7 +106,7 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_officers` ()  BEGIN
 START TRANSACTION;
-SELECT * FROM officer NATURAL JOIN Employee NATURAL JOIN Person;
+SELECT * FROM officer NATURAL JOIN Employee NATURAL JOIN Person INNER JOIN office ON office.`OfficeID` = `FK_Office_OfficeID`;
 COMMIT;
 END$$
 
@@ -254,9 +254,9 @@ CALL insert_log(CONCAT(u, ' added a photo',' with id ', LAST_INSERT_ID()));
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_suboffice` (IN `addressid` INT(11), IN `u` VARCHAR(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_suboffice` (IN `addressid` INT(11), IN `n` VARCHAR(255), IN `u` VARCHAR(255))  BEGIN
 START TRANSACTION;
-INSERT INTO office(`FK_Address_ID`) VALUES(addressid);
+INSERT INTO office(`FK_Address_ID`, `Name`) VALUES(addressid, n);
 INSERT INTO suboffice (`OfficeID`) VALUES(LAST_INSERT_ID());
 CALL insert_log(CONCAT(u, ' added a suboffice',' with id ', LAST_INSERT_ID()));
 COMMIT;
@@ -282,9 +282,9 @@ CALL insert_log(CONCAT(u, ' added a Vehicle Type',' with id ', LAST_INSERT_ID())
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_warehouse` (IN `addressid` INT(11), IN `u` VARCHAR(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_warehouse` (IN `addressid` INT(11), IN `n` VARCHAR(255), IN `u` VARCHAR(255))  BEGIN
 START TRANSACTION;
-INSERT INTO office(`FK_Address_ID`) VALUES(addressid);
+INSERT INTO office(`FK_Address_ID`, `Name`) VALUES(addressid, n);
 INSERT INTO warehouse (`OfficeID`) VALUES(LAST_INSERT_ID());
 CALL insert_log(CONCAT(u, ' added a Warehouse',' with id ', LAST_INSERT_ID()));
 COMMIT;
@@ -536,15 +536,16 @@ INSERT INTO `log` (`LogID`, `Action`, `Time`) VALUES
 
 CREATE TABLE `office` (
   `OfficeID` int(11) NOT NULL,
-  `FK_Address_ID` int(11) NOT NULL
+  `FK_Address_ID` int(11) NOT NULL,
+  `Name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `office`
 --
 
-INSERT INTO `office` (`OfficeID`, `FK_Address_ID`) VALUES
-(1, 3);
+INSERT INTO `office` (`OfficeID`, `FK_Address_ID`, `Name`) VALUES
+(1, 3, 'Dikmen Office');
 
 -- --------------------------------------------------------
 

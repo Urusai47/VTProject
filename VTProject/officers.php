@@ -73,7 +73,7 @@
                                     $result = mysqli_query($db, $query);
                                     while ($row = mysqli_fetch_assoc($result)) {
                                         echo '<tr>';
-                                        echo "<td>" . $row["TCKN"] . "</td> <td>" . $row["SSN"] . "</td> <td>" . $row["FirstName"] . "</td> <td>" . $row["LastName"] . "</td> <td>" . $row["PhoneNumber"] . "</td> <td>" . $row["FK_Office_OfficeID"] . "</td>";
+                                        echo "<td>" . $row["TCKN"] . "</td> <td>" . $row["SSN"] . "</td> <td>" . $row["FirstName"] . "</td> <td>" . $row["LastName"] . "</td> <td>" . $row["PhoneNumber"] . "</td> <td>" . $row["Name"] . "</td>";
                                         echo '</tr>';
                                     }
                                     mysqli_free_result($result);
