@@ -14,14 +14,18 @@ session_start();
 		$count = mysqli_num_rows($result);
 		// If result matched $myusername and $mypassword, table row must be 1 row
 		if($count == 1) {
-        //session_register("myusername");
-        //$_SESSION['login_user'] = $myusername;
-        $error =  'basarili giris.';
-        //header("location: welcome.php");
+                    $row= mysqli_fetch_assoc($result);
+                    $_SESSION["Type"] = $row["Type"];
+                    //session_register("myusername");
+                    //$_SESSION['login_user'] = $myusername;
+                    $error =  'basarili giris.';
+                    //header("location: welcome.php");
 		}
 		else {
 			$error = 'Your Login Name or Password is invalid';
 		}
+                mysqli_free_result($result);
+                mysqli_next_result($db);
 	}
 
         
