@@ -16,8 +16,7 @@ session_start();
 		if($count == 1) {
                     $row= mysqli_fetch_assoc($result);
                     $_SESSION["Type"] = $row["Type"];
-                    //session_register("myusername");
-                    //$_SESSION['login_user'] = $myusername;
+                    $_SESSION["UserName"] = $row["UserName"];
                     $error =  'basarili giris.';
                     //header("location: welcome.php");
 		}
