@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 15, 2017 at 12:23 AM
+-- Generation Time: Jan 15, 2017 at 01:19 PM
 -- Server version: 10.1.19-MariaDB
 -- PHP Version: 5.6.28
 
@@ -168,7 +168,7 @@ START TRANSACTION;
 INSERT IGNORE INTO person (`TCKN`, `FirstName`, `LastName`, `PhoneNumber`) VALUES(tc, fn, ln, pn);
 INSERT IGNORE INTO employee(`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES(tc, ssn2, office);
 INSERT INTO courier(`TCKN`) VALUES(tc);
-CALL insert_log(CONCAT(u, ' added a courier',' with id ', LAST_INSERT_ID()));
+CALL insert_log(CONCAT(u, ' added a courier',' with id ', tc));
 COMMIT;
 END$$
 
@@ -191,7 +191,7 @@ START TRANSACTION;
 INSERT IGNORE INTO person (`TCKN`, `FirstName`, `LastName`, `PhoneNumber`) VALUES(tc, fn, ln, pn);
 INSERT IGNORE INTO employee(`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES(tc, ssn2, office);
 INSERT INTO driver(`TCKN`, `FK_Driving_Plate`) VALUES(tc, carplate);
-CALL insert_log(CONCAT(u, ' added a driver',' with id ', LAST_INSERT_ID()));
+CALL insert_log(CONCAT(u, ' added a driver',' with id ', tc));
 COMMIT;
 END$$
 
@@ -236,7 +236,7 @@ START TRANSACTION;
 INSERT IGNORE INTO person (`TCKN`, `FirstName`, `LastName`, `PhoneNumber`) VALUES(tc, fn, ln, pn);
 INSERT IGNORE INTO employee(`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES(tc, ssn2, office);
 INSERT INTO officer(`TCKN`) VALUES(tc);
-CALL insert_log(CONCAT(u, ' added an officer',' with id ', LAST_INSERT_ID()));
+CALL insert_log(CONCAT(u, ' added an officer',' with id ', tc));
 COMMIT;
 END$$
 
@@ -324,7 +324,8 @@ INSERT INTO `address` (`AddressID`, `Type`, `FullAddress`) VALUES
 (7, 'se', 'se'),
 (8, 'a', 'a'),
 (9, 'a', 'a'),
-(10, 'z', 'z');
+(10, 'z', 'z'),
+(11, 'Dagitim', 'Dikmen');
 
 -- --------------------------------------------------------
 
@@ -353,6 +354,13 @@ CREATE TABLE `cargo` (
 CREATE TABLE `courier` (
   `TCKN` bigint(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `courier`
+--
+
+INSERT INTO `courier` (`TCKN`) VALUES
+(26894788);
 
 -- --------------------------------------------------------
 
@@ -398,6 +406,13 @@ CREATE TABLE `driver` (
   `FK_Driving_Plate` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `driver`
+--
+
+INSERT INTO `driver` (`TCKN`, `FK_Driving_Plate`) VALUES
+(35539665642, '4534512');
+
 -- --------------------------------------------------------
 
 --
@@ -409,6 +424,15 @@ CREATE TABLE `employee` (
   `SSN` int(11) NOT NULL,
   `FK_Office_OfficeID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `employee`
+--
+
+INSERT INTO `employee` (`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES
+(26894788, 225698854, 1),
+(58649898, 2147483647, 1),
+(35539665642, 8418596, 1);
 
 -- --------------------------------------------------------
 
@@ -498,7 +522,11 @@ CREATE TABLE `log` (
 INSERT INTO `log` (`LogID`, `Action`, `Time`) VALUES
 (1, 'b added an address123', '2017-01-15 02:13:01'),
 (2, 'b added an address123', '2017-01-15 02:17:15'),
-(3, 'z added an addresswith id 10', '2017-01-15 02:19:21');
+(3, 'z added an addresswith id 10', '2017-01-15 02:19:21'),
+(4, 'Sanzo added an address with id 11', '2017-01-15 14:49:37'),
+(5, 'Sanzo added a driver with id 0', '2017-01-15 14:53:40'),
+(6, 'Sanzo added a courier with id 0', '2017-01-15 15:06:20'),
+(7, 'Sanzo added an officer with id 0', '2017-01-15 15:12:35');
 
 -- --------------------------------------------------------
 
@@ -528,6 +556,13 @@ CREATE TABLE `officer` (
   `TCKN` bigint(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `officer`
+--
+
+INSERT INTO `officer` (`TCKN`) VALUES
+(58649898);
+
 -- --------------------------------------------------------
 
 --
@@ -551,6 +586,15 @@ CREATE TABLE `person` (
   `LastName` varchar(255) NOT NULL,
   `PhoneNumber` int(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `person`
+--
+
+INSERT INTO `person` (`TCKN`, `FirstName`, `LastName`, `PhoneNumber`) VALUES
+(26894788, 'Boga', 'Boa', 4688945),
+(58649898, 'Bugra', 'Guler', 16585),
+(35539665642, 'Sanberk', 'Saticioglu', 654189);
 
 -- --------------------------------------------------------
 
@@ -609,6 +653,8 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`UserName`, `Password`, `Type`) VALUES
 ('a', '0cc175b9c0f1b6a831c399e269772661', 'Admin'),
+('c', '4a8a08f09d37b73795649038408b5f33', 'User'),
+('n', '7b8b965ad4bca0e41ab51de7b31363a1', 'User'),
 ('u', '7b774effe4a349c6dd82ad4f4f21d34c', 'User');
 
 -- --------------------------------------------------------
@@ -848,7 +894,7 @@ ALTER TABLE `warehouse`
 -- AUTO_INCREMENT for table `address`
 --
 ALTER TABLE `address`
-  MODIFY `AddressID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `AddressID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `cargo`
 --
@@ -868,17 +914,17 @@ ALTER TABLE `discount`
 -- AUTO_INCREMENT for table `driver`
 --
 ALTER TABLE `driver`
-  MODIFY `TCKN` bigint(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `TCKN` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2147483647;
 --
 -- AUTO_INCREMENT for table `employee`
 --
 ALTER TABLE `employee`
-  MODIFY `TCKN` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35216498;
+  MODIFY `TCKN` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2147483647;
 --
 -- AUTO_INCREMENT for table `log`
 --
 ALTER TABLE `log`
-  MODIFY `LogID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `LogID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `office`
 --
