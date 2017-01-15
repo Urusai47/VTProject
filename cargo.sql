@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 15, 2017 at 03:24 PM
+-- Generation Time: Jan 15, 2017 at 06:49 PM
 -- Server version: 10.1.19-MariaDB
 -- PHP Version: 5.6.28
 
@@ -30,10 +30,40 @@ SELECT `UserName` FROM `user` WHERE `UserName` = uname;
 COMMIT;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `checkIfAlreadyEmployee` (IN `tc` VARCHAR(255))  BEGIN
+START TRANSACTION;
+SELECT `TCKN` FROM `employee` WHERE `TCKN` = tc;
+COMMIT;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_address` (IN `aid` VARCHAR(255), IN `u` VARCHAR(255))  BEGIN
 START TRANSACTION;
 DELETE FROM address WHERE `AddressID` = aid;
 CALL insert_log(CONCAT(u, ' deleted an address', ' with id ', aid));
+COMMIT;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_courier` (IN `tc` BIGINT(255), IN `u` VARCHAR(255))  BEGIN
+START TRANSACTION;
+DELETE FROM courier WHERE `TCKN` = tc;
+DELETE FROM employee WHERE `TCKN` = tc;
+CALL insert_log(CONCAT(u, ' deleted a courier',' with id ', tc));
+COMMIT;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_driver` (IN `tc` BIGINT(255), IN `u` VARCHAR(255))  BEGIN
+START TRANSACTION;
+DELETE FROM driver WHERE `TCKN` = tc;
+DELETE FROM employee WHERE `TCKN` = tc;
+CALL insert_log(CONCAT(u, ' deleted a driver',' with id ', tc));
+COMMIT;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_officer` (IN `tc` BIGINT(255), IN `u` VARCHAR(255))  BEGIN
+START TRANSACTION;
+DELETE FROM officer WHERE `TCKN` = tc;
+DELETE FROM employee WHERE `TCKN` = tc;
+CALL insert_log(CONCAT(u, ' deleted an officer',' with id ', tc));
 COMMIT;
 END$$
 
@@ -117,6 +147,12 @@ SELECT * FROM officer NATURAL JOIN Employee NATURAL JOIN Person INNER JOIN offic
 COMMIT;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_offices` ()  BEGIN
+START TRANSACTION;
+SELECT * FROM suboffice NATURAL JOIN office UNION SELECT * FROM warehouse NATURAL JOIN office;
+COMMIT;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_packages` ()  BEGIN
 START TRANSACTION;
 SELECT * FROM package;
@@ -173,7 +209,7 @@ END$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_courier` (IN `tc` BIGINT(255), IN `fn` VARCHAR(255), IN `ln` VARCHAR(255), IN `pn` BIGINT(255), IN `ssn2` BIGINT(255), IN `office` INT(255), IN `u` VARCHAR(255))  BEGIN
 START TRANSACTION;
 INSERT IGNORE INTO person (`TCKN`, `FirstName`, `LastName`, `PhoneNumber`) VALUES(tc, fn, ln, pn);
-INSERT IGNORE INTO employee(`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES(tc, ssn2, office);
+INSERT INTO employee(`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES(tc, ssn2, office);
 INSERT INTO courier(`TCKN`) VALUES(tc);
 CALL insert_log(CONCAT(u, ' added a courier',' with id ', tc));
 COMMIT;
@@ -204,7 +240,7 @@ END$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_driver` (IN `tc` BIGINT(255), IN `fn` VARCHAR(255), IN `ln` VARCHAR(255), IN `pn` BIGINT(255), IN `ssn2` BIGINT(255), IN `office` INT(255), IN `carplate` VARCHAR(255), IN `u` VARCHAR(255))  BEGIN
 START TRANSACTION;
 INSERT IGNORE INTO person (`TCKN`, `FirstName`, `LastName`, `PhoneNumber`) VALUES(tc, fn, ln, pn);
-INSERT IGNORE INTO employee(`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES(tc, ssn2, office);
+INSERT INTO employee(`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES(tc, ssn2, office);
 INSERT INTO driver(`TCKN`, `FK_Driving_Plate`) VALUES(tc, carplate);
 CALL insert_log(CONCAT(u, ' added a driver',' with id ', tc));
 COMMIT;
@@ -249,7 +285,7 @@ END$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_officer` (IN `tc` BIGINT(255), IN `fn` VARCHAR(255), IN `ln` VARCHAR(255), IN `pn` BIGINT(255), IN `ssn2` BIGINT(255), IN `office` INT(255), IN `u` VARCHAR(255))  BEGIN
 START TRANSACTION;
 INSERT IGNORE INTO person (`TCKN`, `FirstName`, `LastName`, `PhoneNumber`) VALUES(tc, fn, ln, pn);
-INSERT IGNORE INTO employee(`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES(tc, ssn2, office);
+INSERT INTO employee(`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES(tc, ssn2, office);
 INSERT INTO officer(`TCKN`) VALUES(tc);
 CALL insert_log(CONCAT(u, ' added an officer',' with id ', tc));
 COMMIT;
@@ -284,9 +320,9 @@ CALL insert_log(CONCAT(u, ' added a suboffice',' with id ', LAST_INSERT_ID()));
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_user` (IN `uname` VARCHAR(255), IN `password` VARCHAR(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_user` (IN `uname` VARCHAR(255), IN `password` VARCHAR(255), IN `mail` VARCHAR(255))  BEGIN
 START TRANSACTION;
-INSERT INTO `user` (`UserName`,`Password`) VALUES(uname,MD5(password));
+INSERT INTO `user` (`UserName`,`Password`, `Email`) VALUES(uname,MD5(password), mail);
 COMMIT;
 END$$
 
@@ -378,7 +414,8 @@ CREATE TABLE `courier` (
 INSERT INTO `courier` (`TCKN`) VALUES
 (234324),
 (723843),
-(4325345);
+(4325345),
+(35539665642);
 
 -- --------------------------------------------------------
 
@@ -429,7 +466,7 @@ CREATE TABLE `driver` (
 --
 
 INSERT INTO `driver` (`TCKN`, `FK_Driving_Plate`) VALUES
-(35539665642, '4534512');
+(456698498, '4534512');
 
 -- --------------------------------------------------------
 
@@ -452,7 +489,8 @@ INSERT INTO `employee` (`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES
 (723843, 23478, 1),
 (4325345, 34598, 1),
 (58649898, 2147483647, 1),
-(35539665642, 8418596, 1);
+(456698498, 423234, 1),
+(35539665642, 34324, 1);
 
 -- --------------------------------------------------------
 
@@ -540,15 +578,16 @@ CREATE TABLE `log` (
 --
 
 INSERT INTO `log` (`LogID`, `Action`, `Time`) VALUES
-(3, 'z added an addresswith id 10', '2017-01-15 02:19:21'),
-(4, 'Sanzo added an address with id 11', '2017-01-15 14:49:37'),
 (8, 'a added a courier with id 12312', '2017-01-15 16:33:19'),
 (9, 'a added a courier with id 134234', '2017-01-15 16:35:26'),
-(10, ' added a courier with id 123', '2017-01-15 16:38:02'),
 (11, 'c added a courier with id 123123', '2017-01-15 16:39:12'),
 (12, 'a added a courier with id 4325345', '2017-01-15 16:41:44'),
 (13, 'a added a courier with id 723843', '2017-01-15 16:46:39'),
-(14, 'a added a courier with id 234324', '2017-01-15 16:50:53');
+(14, 'a added a courier with id 234324', '2017-01-15 16:50:53'),
+(16, 'a deleted a driver with id 23123', '2017-01-15 19:56:52'),
+(17, 'a deleted a driver with id 35539665642', '2017-01-15 19:56:58'),
+(18, 'a added a courier with id 35539665642', '2017-01-15 19:59:58'),
+(19, 'a added a driver with id 456698498', '2017-01-15 20:33:42');
 
 -- --------------------------------------------------------
 
@@ -617,6 +656,7 @@ CREATE TABLE `person` (
 INSERT INTO `person` (`TCKN`, `FirstName`, `LastName`, `PhoneNumber`) VALUES
 (123, 'asd', 'asda', 123123),
 (12312, 'sdfsdf', 'sdfsdf', 234234),
+(23123, 'fsdsdf', 'sdfsdf', 123123),
 (123123, 'asda', 'asdasd', 123123),
 (134234, 'asdasd', 'asdasd', 123123),
 (234324, 'sdffsd', 'dsfdsf', 123213),
@@ -624,6 +664,7 @@ INSERT INTO `person` (`TCKN`, `FirstName`, `LastName`, `PhoneNumber`) VALUES
 (4325345, 'tgdhfji', 'dfgjmni', 4389),
 (26894788, 'Boga', 'Boa', 4688945),
 (58649898, 'Bugra', 'Guler', 16585),
+(456698498, 'testee', 'steset', 342234),
 (35539665642, 'Sanberk', 'Saticioglu', 654189);
 
 -- --------------------------------------------------------
@@ -674,18 +715,20 @@ INSERT INTO `suboffice` (`OfficeID`) VALUES
 CREATE TABLE `user` (
   `UserName` varchar(255) NOT NULL,
   `Password` varchar(255) NOT NULL,
-  `Type` varchar(10) NOT NULL DEFAULT 'User'
+  `Type` varchar(10) NOT NULL DEFAULT 'User',
+  `Email` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`UserName`, `Password`, `Type`) VALUES
-('a', '0cc175b9c0f1b6a831c399e269772661', 'Admin'),
-('c', '4a8a08f09d37b73795649038408b5f33', 'User'),
-('n', '7b8b965ad4bca0e41ab51de7b31363a1', 'User'),
-('u', '7b774effe4a349c6dd82ad4f4f21d34c', 'User');
+INSERT INTO `user` (`UserName`, `Password`, `Type`, `Email`) VALUES
+('a', '0cc175b9c0f1b6a831c399e269772661', 'Admin', 'a@gmail.com'),
+('c', '4a8a08f09d37b73795649038408b5f33', 'User', 'c@gmail.com'),
+('i', '865c0c0b4ab0e063e5caa3387c1a8741', 'User', 'i@gmail.com'),
+('n', '7b8b965ad4bca0e41ab51de7b31363a1', 'User', 'n@gmail.com'),
+('u', '7b774effe4a349c6dd82ad4f4f21d34c', 'User', 'u@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -954,7 +997,7 @@ ALTER TABLE `employee`
 -- AUTO_INCREMENT for table `log`
 --
 ALTER TABLE `log`
-  MODIFY `LogID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `LogID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 --
 -- AUTO_INCREMENT for table `office`
 --
