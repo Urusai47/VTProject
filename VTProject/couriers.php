@@ -7,7 +7,13 @@ if ($_POST['delete'] and $_SERVER['REQUEST_METHOD'] == "POST") {
         $sql = "CALL delete_courier('".$content."' , '" . $_SESSION["UserName"] . "')";
         $result = mysqli_query($db,$sql);
     }
-} else if ($_SERVER["REQUEST_METHOD"] == "POST") {
+} else if ($_POST['report'] and $_SERVER['REQUEST_METHOD'] == "POST"){
+    // We'll be outputting a text file
+    header('Content-type: text/plain');
+    // It will be called report.txt
+    header('Content-Disposition: attachment; filename="report.txt"');
+}
+   else if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // username and password sent from form 
     $tc = mysqli_real_escape_string($db, $_POST["tc"]);
     $firstname = mysqli_real_escape_string($db, $_POST["firstname"]);
@@ -124,6 +130,9 @@ if ($_POST['delete'] and $_SERVER['REQUEST_METHOD'] == "POST") {
                     
                     
                     <div class ="col-md-9">
+                        <form action="" method="post">
+                        <input type ='submit' class='button' name='report' value='report as txt' /> 
+                        </form>
                         <div class="content-box-large">
                             <div class="panel-body">
                                 <table class="table table-striped table-bordered" id="example" cellspacing="0" cellpadding="0" border="0">
