@@ -137,7 +137,6 @@ else {}
                                         ?>
                                     </select>
                                     <br />
-
                                     <div class="action">
                                         <input class="btn btn-primary signup" type = "submit" value = " Add Driver "/><br />
                                     </div>    

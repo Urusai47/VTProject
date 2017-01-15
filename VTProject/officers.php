@@ -28,7 +28,7 @@ if ($_POST['delete'] and $_SERVER['REQUEST_METHOD'] == "POST") {
         if($count > 0){
             $error = 'This person is already an employee';
         } else {
-             $sql = "CALL insert_driver('" . $tc . "', '" . $firstname . "', '" . $lastname . "', '" . $phonenumber . "', '" . $ssn . "' , '" . $office . "' , '" . $carplate . "' , '" . $_SESSION["UserName"] . "')";
+             $sql = "CALL insert_officer('" . $tc . "', '" . $firstname . "', '" . $lastname . "', '" . $phonenumber . "', '" . $ssn . "' , '" . $office . "' , '" . $_SESSION["UserName"] . "')";
              $result = mysqli_query($db, $sql);
         }
     }
@@ -140,6 +140,7 @@ if ($_POST['delete'] and $_SERVER['REQUEST_METHOD'] == "POST") {
                                             <th>LastName</th>
                                             <th>PhoneNumber</th>
                                             <th>Office</th>
+                                            <th>Operations</th>
                                         </tr>
                                     </thead>
                                     <tbody>

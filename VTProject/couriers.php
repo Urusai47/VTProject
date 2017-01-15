@@ -129,12 +129,12 @@ if ($_POST['delete'] and $_SERVER['REQUEST_METHOD'] == "POST") {
                                             <th>LastName</th>
                                             <th>PhoneNumber</th>
                                             <th>Office</th>
+                                            <th>Operations</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
                                         include("config.php");
-//$query = "select field1, fieldn from table [where clause][group by clause][order by clause][limit clause]";
                                         $query = "CALL get_couriers()";
                                         $result = mysqli_query($db, $query);
                                         while ($row = mysqli_fetch_assoc($result)) {
