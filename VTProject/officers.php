@@ -71,96 +71,89 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
                 <div class="col-md-10">
-                    <div class="content-box-large">
-                        <div class="panel-heading">
-                            <div class="panel-title">Officers</div>
-                        </div>
-                        <div class="panel-body">
-                            <div class="col-md-3">
-                                <div class="content-box-large">
-                                    <div class ="row ">
+                    <div class="col-md-3">
+                        <div class="content-box-large">                          
+                            <div class ="row ">
 
-                                        <form action="" method="post">
+                                <form action="" method="post">
 
-                                            <label for="tc">TCKN:</label>
-                                            <input class="form-control" type="text" name="tc" id="tc">
-                                            <label for="firstName">First Name:</label>
-                                            <input class="form-control" type="text" name="firstname" id="firstName">
-                                            <label for="lastName">Last Name:</label>
-                                            <input class="form-control" type="text" name="lastname" id="lastName">
-                                            <label for="phonenumber">Phone Number:</label>
-                                            <input class="form-control" type="text" name="phonenumber" id="phonenumber">
-                                            <label for="ssn">SSN:</label>
-                                            <input class="form-control" type="text" name="ssn" id="ssn">
-                                            <label for="office">Office:</label>
-                                            <input class="form-control" type="text" name="office" id="office">
-                                            <div style = "font-size:11px; color:#cc0000; margin-top:10px">
-                                                <?php echo $error; ?>
-                                            </div>
-                                            <div class="action">
-                                                <input class="btn btn-primary signup" type = "submit" value = " Add Officer "/><br />
-                                            </div>    
-                                        </form>
+                                    <label for="tc">TCKN:</label>
+                                    <input class="form-control" type="text" name="tc" id="tc">
+                                    <label for="firstName">First Name:</label>
+                                    <input class="form-control" type="text" name="firstname" id="firstName">
+                                    <label for="lastName">Last Name:</label>
+                                    <input class="form-control" type="text" name="lastname" id="lastName">
+                                    <label for="phonenumber">Phone Number:</label>
+                                    <input class="form-control" type="text" name="phonenumber" id="phonenumber">
+                                    <label for="ssn">SSN:</label>
+                                    <input class="form-control" type="text" name="ssn" id="ssn">
+                                    <label for="office">Office:</label>
+                                    <input class="form-control" type="text" name="office" id="office">
+                                    <div style = "font-size:11px; color:#cc0000; margin-top:10px">
+                                        <?php echo $error; ?>
                                     </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-9">
-                                <div class="content-box-large">
-                                    <div class="panel-heading">
-                                        <div class="panel-title">Officers</div>
-                                    </div>
-                                    <div class="panel-body">
-                                        <table class="table table-striped table-bordered" id="example" cellspacing="0" cellpadding="0" border="0">
-                                            <thead>
-                                                <tr>
-                                                    <th>TCKN</th>
-                                                    <th>SSN</th>
-                                                    <th>FirstName</th>
-                                                    <th>LastName</th>
-                                                    <th>PhoneNumber</th>
-                                                    <th>Office</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php
-                                                include("config.php");
-                                                //$query = "select field1, fieldn from table [where clause][group by clause][order by clause][limit clause]";
-                                                $query = "CALL get_officers()";
-                                                $result = mysqli_query($db, $query);
-                                                while ($row = mysqli_fetch_assoc($result)) {
-                                                    echo '<tr>';
-                                                    echo "<td>" . $row["TCKN"] . "</td> <td>" . $row["SSN"] . "</td> <td>" . $row["FirstName"] . "</td> <td>" . $row["LastName"] . "</td> <td>" . $row["PhoneNumber"] . "</td> <td>" . $row["Name"] . "</td>";
-                                                    echo '</tr>';
-                                                }
-                                                mysqli_free_result($result);
-                                                mysqli_next_result($db);
-                                                ?>                            
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                    <div class="action">
+                                        <input class="btn btn-primary signup" type = "submit" value = " Add Officer "/><br />
+                                    </div>    
+                                </form>
                             </div>
                         </div>
-
                     </div>
-                </div>
 
 
-                <link href="vendors/datatables/dataTables.bootstrap.css" rel="stylesheet" media="screen">
 
-                <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-                <script src="https://code.jquery.com/jquery.js"></script>
-                <!-- jQuery UI -->
-                <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-                <!-- Include all compiled plugins (below), or include individual files as needed -->
-                <script src="bootstrap/js/bootstrap.min.js"></script>
+                    <div class="col-md-9">
+                        <div class="content-box-large">
+                            <div class="panel-body">
+                                <table class="table table-striped table-bordered" id="example" cellspacing="0" cellpadding="0" border="0">
+                                    <thead>
+                                        <tr>
+                                            <th>TCKN</th>
+                                            <th>SSN</th>
+                                            <th>FirstName</th>
+                                            <th>LastName</th>
+                                            <th>PhoneNumber</th>
+                                            <th>Office</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        include("config.php");
+                                        //$query = "select field1, fieldn from table [where clause][group by clause][order by clause][limit clause]";
+                                        $query = "CALL get_officers()";
+                                        $result = mysqli_query($db, $query);
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo '<tr>';
+                                            echo "<td>" . $row["TCKN"] . "</td> <td>" . $row["SSN"] . "</td> <td>" . $row["FirstName"] . "</td> <td>" . $row["LastName"] . "</td> <td>" . $row["PhoneNumber"] . "</td> <td>" . $row["Name"] . "</td>";
+                                            echo '</tr>';
+                                        }
+                                        mysqli_free_result($result);
+                                        mysqli_next_result($db);
+                                        ?>                            
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>   
+            </div>
+        </div>
 
-                <script src="vendors/datatables/js/jquery.dataTables.min.js"></script>
 
-                <script src="vendors/datatables/dataTables.bootstrap.js"></script>
+        <link href="vendors/datatables/dataTables.bootstrap.css" rel="stylesheet" media="screen">
 
-                <script src="js/custom.js"></script>
-                <script src="js/tables.js"></script>
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://code.jquery.com/jquery.js"></script>
+        <!-- jQuery UI -->
+        <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="bootstrap/js/bootstrap.min.js"></script>
 
-                </body></html>
+        <script src="vendors/datatables/js/jquery.dataTables.min.js"></script>
+
+        <script src="vendors/datatables/dataTables.bootstrap.js"></script>
+
+        <script src="js/custom.js"></script>
+        <script src="js/tables.js"></script>
+
+    </body></html>

@@ -98,12 +98,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                         </div>
                     </div>
+                    
+                    
                     <div class ="col-md-9">
                         <div class="content-box-large">
-
-
-
-
                             <div class="panel-body">
                                 <table class="table table-striped table-bordered" id="example" cellspacing="0" cellpadding="0" border="0">
                                     <thead>
