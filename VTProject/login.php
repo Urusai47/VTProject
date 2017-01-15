@@ -17,8 +17,13 @@ session_start();
                     $row= mysqli_fetch_assoc($result);
                     $_SESSION["Type"] = $row["Type"];
                     $_SESSION["UserName"] = $row["UserName"];
-                    $error =  'basarili giris.';
-                    //header("location: welcome.php");
+                    if($row["Type"] == "Admin"){
+                        header("location: adminPanel.php");
+                    }
+                    else if($row["Type"] == "User"){
+                        header("location: index.php");
+                    }
+                    
 		}
 		else {
 			$error = 'Your Login Name or Password is invalid';
