@@ -3,7 +3,6 @@ include ("config.php");
 session_start();
 
 if ($_POST['delete'] and $_SERVER['REQUEST_METHOD'] == "POST") {
-    echo $_POST['name'];
     
     foreach ($_POST as $name => $content) { // Most people refer to $key => $value
         $sql = "CALL delete_driver('".$content."' , '" . $_SESSION["UserName"] . "')";
@@ -39,6 +38,7 @@ else if ($_SERVER["REQUEST_METHOD"] == "POST") {
 else {}
 ?>
 <html><head>
+
         <title>Bootstrap Admin Theme v3</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- jQuery UI -->
@@ -95,6 +95,9 @@ else {}
                         <div class="content-box-large">
                             <div class ="row ">
                                 <form action="" method="post">  
+                                    <div style = "font-size:11px; color:#cc0000; margin-top:10px">
+                                        <?php echo $error; ?>
+                                    </div>
                                     <label for="tc">TCKN:</label>
                                     <input class="form-control" type="text" name="tc" id="tc">
                                     <label for="firstName">First Name:</label>
@@ -105,7 +108,7 @@ else {}
                                     <input class="form-control" type="text" name="phonenumber" id="phonenumber">
                                     <label for="ssn">SSN:</label>
                                     <input class="form-control" type="text" name="ssn" id="ssn">
-                                    
+
                                     <label for="office">Office:</label>
                                     <select name="office">
                                         <?php
@@ -134,9 +137,7 @@ else {}
                                         ?>
                                     </select>
                                     <br />
-                                    <div style = "font-size:11px; color:#cc0000; margin-top:10px">
-                                        <?php echo $error; ?>
-                                    </div>
+
                                     <div class="action">
                                         <input class="btn btn-primary signup" type = "submit" value = " Add Driver "/><br />
                                     </div>    

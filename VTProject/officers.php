@@ -2,7 +2,6 @@
 include ("config.php");
 session_start();
 if ($_POST['delete'] and $_SERVER['REQUEST_METHOD'] == "POST") {
-    echo $_POST['name'];
     
     foreach ($_POST as $name => $content) { // Most people refer to $key => $value
         $sql = "CALL delete_officer('".$content."' , '" . $_SESSION["UserName"] . "')";
@@ -92,7 +91,9 @@ if ($_POST['delete'] and $_SERVER['REQUEST_METHOD'] == "POST") {
                             <div class ="row ">
 
                                 <form action="" method="post">
-
+                                    <div style = "font-size:11px; color:#cc0000; margin-top:10px">
+                                        <?php echo $error; ?>
+                                    </div>
                                     <label for="tc">TCKN:</label>
                                     <input class="form-control" type="text" name="tc" id="tc">
                                     <label for="firstName">First Name:</label>
@@ -117,9 +118,6 @@ if ($_POST['delete'] and $_SERVER['REQUEST_METHOD'] == "POST") {
                                         ?>
                                     </select>
                                     <br />
-                                    <div style = "font-size:11px; color:#cc0000; margin-top:10px">
-                                        <?php echo $error; ?>
-                                    </div>
                                     <div class="action">
                                         <input class="btn btn-primary signup" type = "submit" value = " Add Officer "/><br />
                                     </div>    
