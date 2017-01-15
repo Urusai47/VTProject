@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 15, 2017 at 01:32 PM
+-- Generation Time: Jan 15, 2017 at 03:24 PM
 -- Server version: 10.1.19-MariaDB
 -- PHP Version: 5.6.28
 
@@ -27,6 +27,13 @@ DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `checkDuplicateUser` (IN `uname` VARCHAR(255))  BEGIN
 START TRANSACTION;
 SELECT `UserName` FROM `user` WHERE `UserName` = uname;
+COMMIT;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_address` (IN `aid` VARCHAR(255), IN `u` VARCHAR(255))  BEGIN
+START TRANSACTION;
+DELETE FROM address WHERE `AddressID` = aid;
+CALL insert_log(CONCAT(u, ' deleted an address', ' with id ', aid));
 COMMIT;
 END$$
 
@@ -172,6 +179,14 @@ CALL insert_log(CONCAT(u, ' added a courier',' with id ', tc));
 COMMIT;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_customer` (IN `tc` BIGINT(255), IN `fn` VARCHAR(255), IN `ln` VARCHAR(255), IN `pn` BIGINT(255), IN `u` VARCHAR(255))  BEGIN
+START TRANSACTION;
+INSERT IGNORE INTO person (`TCKN`, `FirstName`, `LastName`, `PhoneNumber`) VALUES(tc, fn, ln, pn);
+INSERT INTO customer(`TCKN`) VALUES(tc);
+CALL insert_log(CONCAT(u, ' added a customer',' with id ', tc));
+COMMIT;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_deliverytype` (IN `n` VARCHAR(255), IN `u` VARCHAR(255))  BEGIN
 START TRANSACTION;
 INSERT INTO deliverytype (`Name`) VALUES(n);
@@ -186,7 +201,7 @@ CALL insert_log(CONCAT(u, ' added a discount',' with id ', LAST_INSERT_ID()));
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_driver` (IN `tc` BIGINT(255), IN `fn` VARCHAR(255), IN `ln` VARCHAR(255), IN `pn` BIGINT(255), IN `ssn2` BIGINT(255), IN `office` INT(255), IN `carplate` INT(255), IN `u` VARCHAR(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_driver` (IN `tc` BIGINT(255), IN `fn` VARCHAR(255), IN `ln` VARCHAR(255), IN `pn` BIGINT(255), IN `ssn2` BIGINT(255), IN `office` INT(255), IN `carplate` VARCHAR(255), IN `u` VARCHAR(255))  BEGIN
 START TRANSACTION;
 INSERT IGNORE INTO person (`TCKN`, `FirstName`, `LastName`, `PhoneNumber`) VALUES(tc, fn, ln, pn);
 INSERT IGNORE INTO employee(`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES(tc, ssn2, office);
@@ -244,6 +259,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_package` (IN `b` VARCHAR(255
 START TRANSACTION;
 INSERT INTO package (`Barcode`, `FK_Cargo_CargoID`) VALUES(b, cargoid);
 CALL insert_log(CONCAT(u, ' added a package',' with id ', LAST_INSERT_ID()));
+COMMIT;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_person_address` (IN `tc` INT(11), IN `ai` VARCHAR(255), IN `u` VARCHAR(255))  BEGIN
+START TRANSACTION;
+INSERT IGNORE INTO personaddress(`Person_TCKN`, `FK_Address_ID`) VALUES(tc, ai);
+CALL insert_log(CONCAT(u, ' added an address with id ', ai, ' to person with tc ', tc));
 COMMIT;
 END$$
 
@@ -319,12 +341,6 @@ INSERT INTO `address` (`AddressID`, `Type`, `FullAddress`) VALUES
 (2, 'Okul', 'Beytepe'),
 (3, 'Ofis', 'Dikmen Cad.'),
 (4, 'idk', 'idk'),
-(5, 'se', 'se'),
-(6, 'se', 'se'),
-(7, 'se', 'se'),
-(8, 'a', 'a'),
-(9, 'a', 'a'),
-(10, 'z', 'z'),
 (11, 'Dagitim', 'Dikmen');
 
 -- --------------------------------------------------------
@@ -360,7 +376,9 @@ CREATE TABLE `courier` (
 --
 
 INSERT INTO `courier` (`TCKN`) VALUES
-(26894788);
+(234324),
+(723843),
+(4325345);
 
 -- --------------------------------------------------------
 
@@ -430,7 +448,9 @@ CREATE TABLE `employee` (
 --
 
 INSERT INTO `employee` (`TCKN`, `SSN`, `FK_Office_OfficeID`) VALUES
-(26894788, 225698854, 1),
+(234324, 213213, 1),
+(723843, 23478, 1),
+(4325345, 34598, 1),
 (58649898, 2147483647, 1),
 (35539665642, 8418596, 1);
 
@@ -520,13 +540,15 @@ CREATE TABLE `log` (
 --
 
 INSERT INTO `log` (`LogID`, `Action`, `Time`) VALUES
-(1, 'b added an address123', '2017-01-15 02:13:01'),
-(2, 'b added an address123', '2017-01-15 02:17:15'),
 (3, 'z added an addresswith id 10', '2017-01-15 02:19:21'),
 (4, 'Sanzo added an address with id 11', '2017-01-15 14:49:37'),
-(5, 'Sanzo added a driver with id 0', '2017-01-15 14:53:40'),
-(6, 'Sanzo added a courier with id 0', '2017-01-15 15:06:20'),
-(7, 'Sanzo added an officer with id 0', '2017-01-15 15:12:35');
+(8, 'a added a courier with id 12312', '2017-01-15 16:33:19'),
+(9, 'a added a courier with id 134234', '2017-01-15 16:35:26'),
+(10, ' added a courier with id 123', '2017-01-15 16:38:02'),
+(11, 'c added a courier with id 123123', '2017-01-15 16:39:12'),
+(12, 'a added a courier with id 4325345', '2017-01-15 16:41:44'),
+(13, 'a added a courier with id 723843', '2017-01-15 16:46:39'),
+(14, 'a added a courier with id 234324', '2017-01-15 16:50:53');
 
 -- --------------------------------------------------------
 
@@ -593,6 +615,13 @@ CREATE TABLE `person` (
 --
 
 INSERT INTO `person` (`TCKN`, `FirstName`, `LastName`, `PhoneNumber`) VALUES
+(123, 'asd', 'asda', 123123),
+(12312, 'sdfsdf', 'sdfsdf', 234234),
+(123123, 'asda', 'asdasd', 123123),
+(134234, 'asdasd', 'asdasd', 123123),
+(234324, 'sdffsd', 'dsfdsf', 123213),
+(723843, 'ashja', 'hgjghj', 23478),
+(4325345, 'tgdhfji', 'dfgjmni', 4389),
 (26894788, 'Boga', 'Boa', 4688945),
 (58649898, 'Bugra', 'Guler', 16585),
 (35539665642, 'Sanberk', 'Saticioglu', 654189);
@@ -925,7 +954,7 @@ ALTER TABLE `employee`
 -- AUTO_INCREMENT for table `log`
 --
 ALTER TABLE `log`
-  MODIFY `LogID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `LogID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT for table `office`
 --
