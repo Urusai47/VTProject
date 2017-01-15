@@ -111,7 +111,7 @@ if ($_POST['delete'] and $_SERVER['REQUEST_METHOD'] == "POST") {
                                         $query = "CALL get_offices()";
                                         $result = mysqli_query($db, $query);
                                         while ($row = mysqli_fetch_assoc($result)) {
-                                            echo "<option value= " . $row['Name'] . ">" . $row['Name'] . "</option>";
+                                            echo "<option value= " . $row['OfficeID'] . ">" . $row['Name'] . "</option>";
                                         }
                                          mysqli_free_result($result);
                                          mysqli_next_result($db);
