@@ -4,10 +4,10 @@ session_start();
 
 if ($_POST['delete'] and $_SERVER['REQUEST_METHOD'] == "POST") {
     
-    foreach ($_POST as $name => $content) { // Most people refer to $key => $value
-        $sql = "CALL delete_driver('".$content."' , '" . $_SESSION["UserName"] . "')";
-        $result = mysqli_query($db,$sql);
-    }
+    //foreach ($_POST as $name => $content) { // Most people refer to $key => $value
+    //    $sql = "CALL delete_driver('".$content."' , '" . $_SESSION["UserName"] . "')";
+    //    $result = mysqli_query($db,$sql);
+    //}
 } 
 else if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
