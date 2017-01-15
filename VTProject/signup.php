@@ -8,6 +8,7 @@ session_start();
     $username = mysqli_real_escape_string($db, $_POST["username"]);
     $password = mysqli_real_escape_string($db, $_POST["password"]);
     $passwordConfirm = mysqli_real_escape_string($db, $_POST["passwordConfirm"]);
+    $email = mysqli_real_escape_string($db, $_POST["email"]);
     if(ctype_space($username) || ctype_space($password) || $username == '' || $password == ''){
             $error = 'Username or password is empty';
 	} else {
@@ -68,7 +69,8 @@ session_start();
 			            <div class="content-wrap">
 			                <h6>Sign Up</h6>
                                         
-                                        <form action = "" method = "post">                                            
+                                        <form action = "" method = "post">
+                                            <input class="form-control" type = "email" name = "email" class = "box" placeholder ="Email"/> 
                                             <input class="form-control" type = "text" name = "username" class = "box" placeholder ="Username"/>
                                             <input class="form-control" type = "password" name = "password" class = "box" placeholder = "Password">
                                             <input class="form-control" type = "password" name = "passwordConfirm" class = "box" placeholder = "Confirm Password">
